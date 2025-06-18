@@ -1,7 +1,10 @@
-# GROUP NAME HERE
+# Life after death: how legacies of dead foundation species influence ecological processes across marine and terrestrial ecosystems
 
 Principal Investigators:
-- PI NAME HERE
+
+- Dr. Kai L. Kopecky
+- Dr. Katharine N. Suding
+- Dr. Ty A. Tuff
 
 ## Script Explanations
 
