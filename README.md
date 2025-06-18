@@ -1,4 +1,4 @@
-# Life after death: how legacies of dead foundation species influence ecological processes across marine and terrestrial ecosystems
+# Material Legacy Effects
 
 Principal Investigators:
 
