@@ -59,4 +59,19 @@ purrr::walk2(.x = raw_files$id, .y = raw_files$name,
             .f = ~ googledrive::drive_download(file = .x, overwrite = T,
                                                path = file.path("data", "raw", .y)))
 
+## -------------------------------------------- ##
+# Data Key ----
+## -------------------------------------------- ##
+
+# Define relevant Drive folder
+drive_key <- googledrive::as_id("https://drive.google.com/drive/u/0/folders/1DtyeqOCeMuXxOY6kDk9zNe0MtZ8TmLbC")
+
+# Identify data files in that folder
+(key_file <- googledrive::drive_ls(path = drive_key, pattern = "material-legacy_data-key"))
+
+# Download all of these (overwriting local copies if any exist)
+purrr::walk2(.x = key_file$id, .y = key_file$name,
+             .f = ~ googledrive::drive_download(file = .x, overwrite = T, type = "csv",
+                                                path = file.path("data", .y)))
+
 # End ----
