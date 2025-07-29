@@ -80,28 +80,159 @@ dplyr::glimpse(qc_v3)
 # Filter Unwanted Info ----
 ## -------------------------------------------- ##
 
+# For each dataset, there are unwanted values
+## Doing this piece-wise to better show how many rows are lost per step
 
+# GCE should be only 0.25m^2 samples
+qc_v4a <- qc_v3 %>% 
+  dplyr::filter(lter != "GCE" | (lter == "GCE" & sample_area_m2 == 0.25))
 
+# LUQ should only be some treatments and certain years
+qc_v4b <- qc_v4a %>% 
+  dplyr::filter(lter != "LUQ" | (lter == "LUQ" & year >= 2005 & year <= 2013 &
+                                   treatment_litter %in% c("Trim&clear", "Trim+Debris")))
+
+# MCR should only be certain taxa
+qc_v4c <- qc_v4b %>% 
+  dplyr::filter(lter != "MCR" | (lter == "MCR" & 
+                                   taxon %in% c("Acropora", "Pocillopora", "Dead coral")))
+
+# VCR should only be reference habitats and only certain taxa
+qc_v4d <- qc_v4c %>% 
+  dplyr::filter(lter != "VCR" | (lter == "VCR" & context == "Reference" &
+                                   taxon %in% c("Box Adult Oyster", "Spat Oyster")))
+
+# Make final object (for this section)
+qc_v5 <- qc_v4d %>% 
+  # Remove unwanted columns
+  dplyr::select(-sample_area_m2, -context)
+
+# Check final rows lost
+message(nrow(qc_v3) - nrow(qc_v5), " rows lost")
+
+# Any datasets completely lost? (shouldn't be any)
+setdiff(x = unique(qc_v3$source), y = unique(qc_v5$source))
+
+# Check structure
+dplyr::glimpse(qc_v5)
 
 ## -------------------------------------------- ##
-# Aggregate Responses (As Needed) ----
+# Treatment Coalescing ----
 ## -------------------------------------------- ##
 
+# Coalesce treatment info into a single column
+qc_v6 <- qc_v5 %>% 
+  dplyr::mutate(treatment = dplyr::case_when(
+    ## BNZ should just use whatever the fire treatments are
+    lter == "BNZ" ~ paste0("fire_", treatment_fire),
+    ## GCE disturbance treatments
+    treatment_disturbance == 1 ~ "disturbed",
+    treatment_disturbance == 0 ~ "undisturbed",
+    ## LUQ litter treatments
+    treatment_litter == "Trim&clear" ~ "litter_removed",
+    treatment_litter == "Trim+Debris" ~ "litter_added",
+    ## MCR coral taxa
+    taxon %in% c("Acropora", "Pocillopora") ~ "coral_live",
+    taxon == "Dead coral" ~ "coral_dead",
+    ## VCR oyster taxa
+    taxon == "Spat Oyster" ~ "oyster_juvenile",
+    taxon == "Box Adult Oyster" ~ "oyster_dead",
+    # Any unspecified should just be 'none'
+    T ~ "none"))
 
+# Check resulting treatments
+sort(unique(qc_v6$treatment))
 
+# Look at original treatment columns where no treatment was identified
+qc_v6 %>% 
+  dplyr::filter(treatment == "none") %>% 
+  dplyr::select(source, dplyr::starts_with("treatment")) %>% 
+  dplyr::distinct()
+
+# Structure check
+dplyr::glimpse(qc_v6)
 
 ## -------------------------------------------- ##
 # Reorder Columns ----
 ## -------------------------------------------- ##
 
+# Let's reorder and pare down columns
+qc_v7 <- qc_v6 %>% 
+  # Macro grouping stuff before everything
+  dplyr::relocate(source, lter, site, year, treatment,
+                  .before = dplyr::everything()) %>% 
+  # Responses after everything
+  dplyr::relocate(dplyr::starts_with("response"), 
+                  .after = dplyr::everything()) %>% 
+  # Drop old treatment columns (incl. taxon column)
+  dplyr::select(-dplyr::starts_with("treatment_"), -taxon)
 
+# Any gained/lost columns?
+supportR::diff_check(old = names(qc_v6), new = names(qc_v7))
+
+# Structure check
+dplyr::glimpse(qc_v7)
+
+## -------------------------------------------- ##
+# Aggregate Responses (As Needed) ----
+## -------------------------------------------- ##
+
+# Identify the response column names
+(resp_colnames <- qc_v7 %>% 
+  dplyr::select(dplyr::contains("response")) %>% 
+  names())
+
+# What non-numbers are in the response columns?
+supportR::num_check(data = qc_v7, col = resp_colnames)
+
+# Want to aggregate within certain grouping variables
+qc_v8a <- qc_v7 %>% 
+  # Make responses into true numbers
+  ## Currently unnecessary!
+  # Make an observation ID column
+  dplyr::mutate(id = 1:nrow(.)) 
+
+# All fixed?
+supportR::num_check(data = qc_v8a, col = resp_colnames)
+
+# Now aggregate as needed
+qc_v8b <- qc_v8a %>% 
+  # Aggregate within all non-response columns
+  dplyr::group_by(dplyr::across(dplyr::all_of(setdiff(x = names(.),
+                                                      y = c(resp_colnames, "id"))))) %>% 
+  dplyr::summarize(resp_og = unique(response),
+                   resp_avg = mean(response_unavg, na.rm = T),
+                   resp_sum = sum(response_unsum, na.rm = T),
+                   obs = min(id, na.rm = T),
+                   .groups = "keep") %>% 
+  dplyr::ungroup() %>% 
+  # Coalesce to a single 'true' response
+  dplyr::mutate(response_actual = dplyr::coalesce(resp_og, resp_avg, resp_sum)) %>%
+  # Drop all intermediary response columns
+  dplyr::select(-dplyr::starts_with("resp_")) %>% 
+  # Rename actual response column
+  dplyr::rename(response = response_actual)
+  
+# Lack responses anywhere?
+dplyr::filter(qc_v8b, is.na(response))
+
+# If any, check the original dataframe responses out for that
+dplyr::filter(qc_v8a, id %in% dplyr::filter(qc_v8b, is.na(response))$obs)
+  
+# Tidy up that object
+qc_v9 <- qc_v8b %>% 
+  # Drop observation ID
+  dplyr::select(-obs)
+
+# Check structure
+dplyr::glimpse(qc_v9)
 
 ## -------------------------------------------- ##
 # Export ----
 ## -------------------------------------------- ##
 
 # Make a final data object
-qc_v99 <- qc_v3
+qc_v99 <- qc_v9
 
 # Export this locally
 write.csv(qc_v99, row.names = F, na = '',
