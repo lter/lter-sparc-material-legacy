@@ -122,7 +122,7 @@ dplyr::glimpse(qc_v5)
 
 # Coalesce treatment info into a single column
 qc_v6 <- qc_v5 %>% 
-  dplyr::mutate(treatment = dplyr::case_when(
+  dplyr::mutate(treatment_categorical = dplyr::case_when(
     ## BNZ should just use whatever the fire treatments are
     lter == "BNZ" ~ paste0("fire_", treatment_fire),
     ## GCE disturbance treatments
@@ -141,11 +141,11 @@ qc_v6 <- qc_v5 %>%
     T ~ "none"))
 
 # Check resulting treatments
-sort(unique(qc_v6$treatment))
+sort(unique(qc_v6$treatment_categorical))
 
 # Look at original treatment columns where no treatment was identified
 qc_v6 %>% 
-  dplyr::filter(treatment == "none") %>% 
+  dplyr::filter(treatment_categorical == "none") %>% 
   dplyr::select(source, dplyr::starts_with("treatment")) %>% 
   dplyr::distinct()
 
@@ -159,13 +159,17 @@ dplyr::glimpse(qc_v6)
 # Let's reorder and pare down columns
 qc_v7 <- qc_v6 %>% 
   # Macro grouping stuff before everything
-  dplyr::relocate(source, lter, site, year, treatment,
+  dplyr::relocate(source, lter, site, year,
                   .before = dplyr::everything()) %>% 
+  # Treatment next
+  dplyr::relocate(dplyr::starts_with("treatment_"), 
+                  .after = year) %>% 
   # Responses after everything
   dplyr::relocate(dplyr::starts_with("response"), 
                   .after = dplyr::everything()) %>% 
   # Drop old treatment columns (incl. taxon column)
-  dplyr::select(-dplyr::starts_with("treatment_"), -taxon)
+  dplyr::select(-treatment_fire, -treatment_disturbance, -treatment_litter, 
+                -treatment_remove, -taxon)
 
 # Any gained/lost columns?
 supportR::diff_check(old = names(qc_v6), new = names(qc_v7))
