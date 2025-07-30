@@ -19,15 +19,15 @@ librarian::shelf(tidyverse, googledrive)
 rm(list = ls()); gc()
 
 # Identify files for this site
-(focal_files <- dir(path = file.path("data", "raw", "unjoined"), pattern = "LUQ___") )
+(focal_files <- dir(path = file.path("data", "raw", "not-ready"), pattern = "LUQ___") )
 
 ## -------------------------------------------- ##
 # Join Inputs ----
 ## -------------------------------------------- ##
 
 # Read in the relevant files
-luq_trt_v1 <- read.csv(file = file.path("data", "raw", "unjoined", focal_files[[1]]))
-luq_seed_v1 <- read.csv(file = file.path("data", "raw", "unjoined", focal_files[[2]]))
+luq_trt_v1 <- read.csv(file = file.path("data", "raw", "not-ready", focal_files[[1]]))
+luq_seed_v1 <- read.csv(file = file.path("data", "raw", "not-ready", focal_files[[2]]))
 
 # Check structure
 dplyr::glimpse(luq_trt_v1)
