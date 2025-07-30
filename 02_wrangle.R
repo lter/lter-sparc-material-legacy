@@ -198,7 +198,7 @@ supportR::num_check(data = qc_v7, col = resp_colnames)
 
 # Want to aggregate within certain grouping variables
 qc_v8a <- qc_v7 %>% 
-  # Make responses into true numbers
+  # Fix any non-numbers in the response columns
   ## Currently unnecessary!
   # Make an observation ID column
   dplyr::mutate(id = 1:nrow(.)) 
@@ -221,9 +221,10 @@ qc_v8b <- qc_v8a %>%
                    .groups = "keep") %>% 
   dplyr::ungroup() %>% 
   # Coalesce to a single 'true' response
-  dplyr::mutate(response_actual = dplyr::coalesce(resp_og, resp_avg, resp_sum)) %>%
-  # Drop all intermediary response columns
-  dplyr::select(-dplyr::starts_with("resp_")) %>% 
+  dplyr::mutate(response_actual = dplyr::case_when(
+    !is.na(resp_og) ~ resp_og,
+    !is.na(resp_avg) ~ resp_avg,
+    T ~ resp_sum)) %>%
   # Rename actual response column
   dplyr::rename(response = response_actual)
   
@@ -235,8 +236,8 @@ dplyr::filter(qc_v8a, id %in% dplyr::filter(qc_v8b, is.na(response))$obs)
   
 # Tidy up that object
 qc_v9 <- qc_v8b %>% 
-  # Drop observation ID
-  dplyr::select(-obs)
+  # Drop all intermediary response columns & observation ID
+  dplyr::select(-dplyr::starts_with("resp_"), -obs)
 
 # Check structure
 dplyr::glimpse(qc_v9)
