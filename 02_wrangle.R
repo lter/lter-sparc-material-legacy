@@ -92,10 +92,9 @@ qc_v4b <- qc_v4a %>%
   dplyr::filter(lter != "LUQ" | (lter == "LUQ" & year >= 2005 & year <= 2013 &
                                    treatment_litter %in% c("Trim&clear", "Trim+Debris")))
 
-# MCR should only be certain taxa
+# MCR is good to go because of pre-processing
 qc_v4c <- qc_v4b %>% 
-  dplyr::filter(lter != "MCR" | (lter == "MCR" & 
-                                   taxon %in% c("Acropora", "Pocillopora", "Dead coral")))
+  dplyr::filter(lter != "MCR" | lter == "MCR")
 
 # VCR should only be reference habitats and only certain taxa
 qc_v4d <- qc_v4c %>% 
@@ -140,9 +139,6 @@ qc_v6 <- qc_v5 %>%
       T ~ NA),
     # Resolve taxa information
     taxa = dplyr::case_when(
-      ## MCR coral taxa
-      taxon %in% c("Acropora", "Pocillopora") ~ "coral_live",
-      taxon == "Dead coral" ~ "coral_dead",
       ## VCR oyster taxa
       taxon == "Spat Oyster" ~ "oyster_juvenile",
       taxon == "Box Adult Oyster" ~ "oyster_dead",
@@ -154,11 +150,11 @@ sort(unique(qc_v6$treatment_categorical))
 sort(unique(qc_v6$taxa))
 
 # Look at original treatment columns where no treatment was identified
-## VCR has no treatment because "taxa" is the critical column
 qc_v6 %>% 
   dplyr::filter(is.na(treatment_categorical)) %>% 
   dplyr::select(source, dplyr::starts_with("treatment")) %>% 
   dplyr::distinct()
+## VCR has no treatment because "taxa" is the critical column
 
 # Structure check
 dplyr::glimpse(qc_v6)
@@ -215,11 +211,6 @@ qc_v8b <- qc_v8a %>%
   # Make sure response columns are all true numbers
   dplyr::mutate(dplyr::across(.cols = dplyr::starts_with("response"),
                               .fns = ~ as.numeric(.))) %>% 
-  # Do a small amount of conditional transformation
-  dplyr::mutate(
-    ## MCR response needs to be multiplied by 0.0001 before averaging
-    response_unavg = ifelse(lter != "MCR", yes = response_unavg,
-                            no = response_unavg * 0.0001)) %>% 
   # Aggregate within all non-response columns
   dplyr::group_by(dplyr::across(dplyr::all_of(setdiff(x = names(.),
                                                       y = c(resp_colnames, "id"))))) %>% 
