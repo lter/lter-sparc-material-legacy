@@ -4,7 +4,13 @@ Principal Investigators: Dr. Kai L. Kopecky, Dr. Katharine N. Suding, Dr. Ty A. 
 
 ## Script Explanations
 
-Briefly describe the purpose of each script (or folder of scripts) here as you create them!
+- `00_setup.R` -- Create needed folders and download needed inputs for scripts from group's Google Drive
+    - Note you need to be in this group to have access to that Drive!
+- `01_harmonize.R` -- Standardize column names across input datasets and produce a single harmonized output
+- `02_wrangle.R` -- Perform per-analysis wrangling (e.g., quality control, filtering, response summarization, etc.)
+- `03_calc-effect-size.R` -- Fit relevant models, and extract effect sizes as well as model predictions 
+- `99_upload.R` -- Upload products of any/all preceding scripts to group's Google Drive
+    - Note you need to be in this group to have access to that Drive!
 
 ## Contributing Guidelines & Style Guide
 
