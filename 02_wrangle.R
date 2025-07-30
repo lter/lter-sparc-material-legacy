@@ -122,30 +122,41 @@ dplyr::glimpse(qc_v5)
 
 # Coalesce treatment info into a single column
 qc_v6 <- qc_v5 %>% 
-  dplyr::mutate(treatment_categorical = dplyr::case_when(
-    ## BNZ should just use whatever the fire treatments are
-    lter == "BNZ" ~ paste0("fire_", treatment_fire),
-    ## GCE disturbance treatments
-    treatment_disturbance == 1 ~ "disturbed",
-    treatment_disturbance == 0 ~ "undisturbed",
-    ## LUQ litter treatments
-    treatment_litter == "Trim&clear" ~ "litter_removed",
-    treatment_litter == "Trim+Debris" ~ "litter_added",
-    ## MCR coral taxa
-    taxon %in% c("Acropora", "Pocillopora") ~ "coral_live",
-    taxon == "Dead coral" ~ "coral_dead",
-    ## VCR oyster taxa
-    taxon == "Spat Oyster" ~ "oyster_juvenile",
-    taxon == "Box Adult Oyster" ~ "oyster_dead",
-    # Any unspecified should just be 'none'
-    T ~ "none"))
+  dplyr::mutate(
+    # Resolve treatment information
+    treatment_categorical = dplyr::case_when(
+      ## BNZ should just use whatever the fire treatments are
+      lter == "BNZ" ~ paste0("fire_", treatment_fire),
+      ## GCE disturbance treatments
+      treatment_disturbance == 1 ~ "disturbed",
+      treatment_disturbance == 0 ~ "undisturbed",
+      ## LUQ litter treatments
+      treatment_litter == "Trim&clear" ~ "litter_removed",
+      treatment_litter == "Trim+Debris" ~ "litter_added",
+      ## MCR removal treatments
+      treatment_remove == "Removal" ~ "coral_remove",
+      treatment_remove == "Retention" ~ "coral_retain",
+      # Any unspecified should just be 'none'
+      T ~ NA),
+    # Resolve taxa information
+    taxa = dplyr::case_when(
+      ## MCR coral taxa
+      taxon %in% c("Acropora", "Pocillopora") ~ "coral_live",
+      taxon == "Dead coral" ~ "coral_dead",
+      ## VCR oyster taxa
+      taxon == "Spat Oyster" ~ "oyster_juvenile",
+      taxon == "Box Adult Oyster" ~ "oyster_dead",
+      # Any unspecified should just be 'none'
+      T ~ NA))
 
-# Check resulting treatments
+# Check resulting treatments and taxa
 sort(unique(qc_v6$treatment_categorical))
+sort(unique(qc_v6$taxa))
 
 # Look at original treatment columns where no treatment was identified
+## VCR has no treatment because "taxa" is the critical column
 qc_v6 %>% 
-  dplyr::filter(treatment_categorical == "none") %>% 
+  dplyr::filter(is.na(treatment_categorical)) %>% 
   dplyr::select(source, dplyr::starts_with("treatment")) %>% 
   dplyr::distinct()
 
@@ -161,8 +172,8 @@ qc_v7 <- qc_v6 %>%
   # Macro grouping stuff before everything
   dplyr::relocate(source, lter, site, year,
                   .before = dplyr::everything()) %>% 
-  # Treatment next
-  dplyr::relocate(dplyr::starts_with("treatment_"), 
+  # Treatment & taxa next
+  dplyr::relocate(dplyr::starts_with("treatment_"), taxa,
                   .after = year) %>% 
   # Responses after everything
   dplyr::relocate(dplyr::starts_with("response"), 
@@ -201,6 +212,14 @@ supportR::num_check(data = qc_v8a, col = resp_colnames)
 
 # Now aggregate as needed
 qc_v8b <- qc_v8a %>% 
+  # Make sure response columns are all true numbers
+  dplyr::mutate(dplyr::across(.cols = dplyr::starts_with("response"),
+                              .fns = ~ as.numeric(.))) %>% 
+  # Do a small amount of conditional transformation
+  dplyr::mutate(
+    ## MCR response needs to be multiplied by 0.0001 before averaging
+    response_unavg = ifelse(lter != "MCR", yes = response_unavg,
+                            no = response_unavg * 0.0001)) %>% 
   # Aggregate within all non-response columns
   dplyr::group_by(dplyr::across(dplyr::all_of(setdiff(x = names(.),
                                                       y = c(resp_colnames, "id"))))) %>% 
