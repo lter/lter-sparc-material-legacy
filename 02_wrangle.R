@@ -51,24 +51,17 @@ dplyr::glimpse(qc_v2)
 # Want year information for all data where it is available
 qc_v3 <- qc_v2 %>% 
   # Strip year out from certain formats of date
-  dplyr::mutate(year.yy = ifelse(!is.na(date_m.d.yy),
-                                 yes = as.numeric(stringr::str_sub(string = date_m.d.yy, 
-                                                                   start = nchar(date_m.d.yy) - 1, 
-                                                                   end = nchar(date_m.d.yy))),
-                                 no = NA)) %>% 
+  ## Not currently needed
   # Make a single year column
   dplyr::mutate(year = dplyr::case_when(
     !is.na(year) ~ as.character(year),
-    !is.na(year.yy) & year.yy <= 9 ~ paste0("200", year.yy),
-    !is.na(year.yy) & year.yy > 9 & year.yy < 26 ~ paste0("20", year.yy),
-    !is.na(year.yy) & year.yy >= 26 ~ paste0("19", year.yy),
-    !is.na(date_yyyy.mm.dd) ~ stringr::str_sub(date_yyyy.mm.dd, start = 1, end = 4),
+    !is.na(date_yyyy.mm.dd) ~ stringr::str_sub(string = date_yyyy.mm.dd, start = 1, end = 4),
     source == "BNZ___AK2004 sites seeds.csv" ~ "2004",
     T ~ NA)) %>% 
   # Make year truly numeric
   dplyr::mutate(year = as.numeric(year)) %>% 
   # Ditch temporary columns and date columns
-  dplyr::select(-year.yy, -date_m.d.yy, -date_yyyy.mm.dd)
+  dplyr::select(-date_yyyy.mm.dd)
 
 # How many years were identified?
 supportR::count_diff(vec1 = qc_v2$year, vec2 = qc_v3$year, what = NA)
@@ -96,15 +89,14 @@ qc_v4b <- qc_v4a %>%
 qc_v4c <- qc_v4b %>% 
   dplyr::filter(lter != "MCR" | lter == "MCR")
 
-# VCR should only be reference habitats and only certain taxa
+# VCR is good to go because of pre-processing
 qc_v4d <- qc_v4c %>% 
-  dplyr::filter(lter != "VCR" | (lter == "VCR" & context == "Reference" &
-                                   taxon %in% c("Box Adult Oyster", "Spat Oyster")))
+  dplyr::filter(lter != "VCR" | lter == "VCR")
 
 # Make final object (for this section)
 qc_v5 <- qc_v4d %>% 
   # Remove unwanted columns
-  dplyr::select(-sample_area_m2, -context)
+  dplyr::select(-sample_area_m2)
 
 # Check final rows lost
 message(nrow(qc_v3) - nrow(qc_v5), " rows lost")
