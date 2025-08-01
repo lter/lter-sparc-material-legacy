@@ -59,6 +59,13 @@ dplyr::glimpse(lter_list)
 # Make an empty list
 model_list <- list()
 
+# AND: does continuous treatment (dead wood mass / hectare) affect the response?
+## Random effects = random intercept for site
+model_list[["AND"]] <- glmmTMB::glmmTMB(response ~ treatment_continuous + 
+                                          (1 | site),
+                                        family = stats::gaussian(link = "identity"),
+                                        data = lter_list[["AND"]])
+
 # BNZ: does continuous treatment (standing dead area) affect the response?
 ## Random effects = random slope of categorical treatment within site
 model_list[["BNZ"]] <- glmmTMB::glmmTMB(response ~ treatment_continuous + 
@@ -67,12 +74,35 @@ model_list[["BNZ"]] <- glmmTMB::glmmTMB(response ~ treatment_continuous +
                                         data = lter_list[["BNZ"]])
 ## From Kai: "False convergence warning; tried many alternative options, none of which resolved this. Proceeding anyway, but with caution; diagnostics tests won't run due to non-convergence"
 
+# FCE: does continuous treatment (mean weight of litter) affect the response?
+## Random effects = random intercept for site
+model_list[["FCE"]] <- glmmTMB::glmmTMB(response ~ treatment_continuous +
+                                          (1 | site),
+                                        family = stats::gaussian(link = "identity"),
+                                        data = lter_list[["FCE"]])
+
 # GCE: does categorical treatment affect the response?
 ## Random effects = random intercepts for site and year
 model_list[["GCE"]] <- glmmTMB::glmmTMB(response ~ treatment_categorical + 
                                           (1 | site) + (1 | year),
                                         family = stats::gaussian(link = "logit"),
                                      data = lter_list[["GCE"]])
+
+# HFR: does categorical treatment affect the response?
+## Random effects = Random slope of plot nested within block and random intercept of year
+model_list[["HFR"]] <- glmmTMB::glmmTMB(response ~ treatment_categorical + 
+                                          (1 | block/plot) + (1 | year),
+                                     family = glmmTMB::tweedie(link = "log"),
+                                     data = lter_list[["HFR"]])
+# **NOTE** Need to check with Kai about this model because it throws a warning
+
+# KNZ: does categorical treatment affect the response?
+## Random effects = random intercepts for year and site
+model_list[["KNZ"]] <- glmmTMB::glmmTMB(response ~ treatment_categorical + 
+                                          (1 | site) + (1 | year),
+                                        family = stats::gaussian(link = "logit"),
+                                        data = lter_list[["KNZ"]])
+# **NOTE** Need to check with Kai about this model because it throws a warning
 
 # LUQ: does categorical treatment affect the response?
 ## Random effects = random slope of block within plot and an intercept of year
@@ -87,6 +117,13 @@ model_list[["MCR"]] <- glmmTMB::glmmTMB(response ~ treatment_continuous +
                                        (1 | treatment_categorical/plot) + (1 | year),
                                      family = stats::gaussian(link = "identity"),
                                      data = lter_list[["MCR"]])
+
+# SONGS: does continuous treatment ("dmaho" % cover) affect the response? 
+## Random effects = random slope of plot within site and random intercept of year
+model_list[["SONGS"]] <- glmmTMB::glmmTMB(response ~ treatment_continuous +
+                                            (1 | site/plot) + (1 | year),
+                                          family = glmmTMB::nbinom2(link = "log"),
+                                          data = lter_list[["SONGS"]])
 
 # VCR: does taxa (oyster juvenile/dead) affect the response?
 ## Random effects = random intercept of site and year
