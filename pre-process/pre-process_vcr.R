@@ -12,7 +12,7 @@
 ## -------------------------------------------- ##
 
 # Load libraries
-librarian::shelf(tidyverse)
+librarian::shelf(tidyverse, googledrive)
 
 # Clear environment
 rm(list = ls()); gc()
