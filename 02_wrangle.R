@@ -41,6 +41,9 @@ qc_v2 <- qc_v1 %>%
   dplyr::relocate(lter, .after = source) %>% 
   dplyr::select(-junk)
 
+# Check existing 'LTER's
+sort(unique(qc_v2$lter))
+
 # Re-check structure
 dplyr::glimpse(qc_v2)
 
@@ -66,6 +69,12 @@ qc_v3 <- qc_v2 %>%
 # How many years were identified?
 supportR::count_diff(vec1 = qc_v2$year, vec2 = qc_v3$year, what = NA)
 
+# Which datasets lack year?
+qc_v3 %>% 
+  dplyr::filter(is.na(year)) %>% 
+  dplyr::select(source) %>% 
+  dplyr::distinct()
+
 # Check structure
 dplyr::glimpse(qc_v3)
 
@@ -76,27 +85,54 @@ dplyr::glimpse(qc_v3)
 # For each dataset, there are unwanted values
 ## Doing this piece-wise to better show how many rows are lost per step
 
-# GCE should be only 0.25m^2 samples
+# AND (currently fine)
 qc_v4a <- qc_v3 %>% 
+  dplyr::filter(lter != "AND" | (lter == "AND"))
+
+# BNZ (currently fine)
+qc_v4b <- qc_v4a %>% 
+  dplyr::filter(lter != "BNZ" | (lter == "BNZ"))
+
+# FCE (good to go because of pre-processing)
+qc_v4c <- qc_v4b %>% 
+  dplyr::filter(lter != "FCE" | (lter == "FCE"))
+
+# GCE should be only 0.25m^2 samples
+qc_v4d <- qc_v4c %>% 
   dplyr::filter(lter != "GCE" | (lter == "GCE" & sample_area_m2 == 0.25))
 
+# HFR should be only hemlock species and certain treatments and only saplings
+qc_v4e <- qc_v4d %>% 
+  dplyr::filter(lter != "HFR" | (lter == "HFR" & taxon == "TSCA" & 
+                                   forest_stratum == "Sapling" &
+                                   treatment_logging %in% c("girdled", "logged")))
+
+# KNZ (good to go because of pre-processing)
+qc_v4f <- qc_v4e %>% 
+  dplyr::filter(lter != "KNZ" | (lter == "KNZ"))
+
 # LUQ should only be some treatments and certain years
-qc_v4b <- qc_v4a %>% 
+qc_v4g <- qc_v4f %>% 
   dplyr::filter(lter != "LUQ" | (lter == "LUQ" & year >= 2005 & year <= 2013 &
                                    treatment_litter %in% c("Trim&clear", "Trim+Debris")))
 
 # MCR is good to go because of pre-processing
-qc_v4c <- qc_v4b %>% 
-  dplyr::filter(lter != "MCR" | lter == "MCR")
+qc_v4h <- qc_v4g %>% 
+  dplyr::filter(lter != "MCR" | (lter == "MCR"))
+
+# SONGS should be only non-zero for response and continuous treatment
+qc_v4i <- qc_v4h %>% 
+  dplyr::filter(lter != "SONGS" | (lter == "SONGS" & response > 0 & 
+                                     treatment_continuous > 0))
 
 # VCR is good to go because of pre-processing
-qc_v4d <- qc_v4c %>% 
-  dplyr::filter(lter != "VCR" | lter == "VCR")
+qc_v4j <- qc_v4i %>% 
+  dplyr::filter(lter != "VCR" | (lter == "VCR"))
 
 # Make final object (for this section)
-qc_v5 <- qc_v4d %>% 
+qc_v5 <- qc_v4j %>% 
   # Remove unwanted columns
-  dplyr::select(-sample_area_m2)
+  dplyr::select(-sample_area_m2, -forest_stratum)
 
 # Check final rows lost
 message(nrow(qc_v3) - nrow(qc_v5), " rows lost")
@@ -114,13 +150,17 @@ dplyr::glimpse(qc_v5)
 # Coalesce treatment info into a single column
 qc_v6 <- qc_v5 %>% 
   dplyr::mutate(
-    # Resolve treatment information
+    # Resolve *categorical* treatment information
     treatment_categorical = dplyr::case_when(
       ## BNZ should just use whatever the fire treatments are
       lter == "BNZ" ~ paste0("fire_", treatment_fire),
       ## GCE disturbance treatments
       treatment_disturbance == 1 ~ "disturbed",
       treatment_disturbance == 0 ~ "undisturbed",
+      ## HFR logging treatments
+      lter == "HFR" ~ paste0("logging_", treatment_logging),
+      ## KNZ fire treatments
+      lter == "KNZ" ~ paste0("fire_", treatment_fire),
       ## LUQ litter treatments
       treatment_litter == "Trim&clear" ~ "litter_removed",
       treatment_litter == "Trim+Debris" ~ "litter_added",
@@ -143,9 +183,10 @@ sort(unique(qc_v6$taxa))
 
 # Look at original treatment columns where no treatment was identified
 qc_v6 %>% 
-  dplyr::filter(is.na(treatment_categorical)) %>% 
+  dplyr::filter(is.na(treatment_categorical) & is.na(treatment_continuous)) %>% 
   dplyr::select(source, dplyr::starts_with("treatment")) %>% 
-  dplyr::distinct()
+  dplyr::distinct() %>% 
+  dplyr::glimpse()
 ## VCR has no treatment because "taxa" is the critical column
 
 # Structure check
@@ -158,7 +199,7 @@ dplyr::glimpse(qc_v6)
 # Let's reorder and pare down columns
 qc_v7 <- qc_v6 %>% 
   # Macro grouping stuff before everything
-  dplyr::relocate(source, lter, site, year,
+  dplyr::relocate(source, lter, year, site, block, plot,
                   .before = dplyr::everything()) %>% 
   # Treatment & taxa next
   dplyr::relocate(dplyr::starts_with("treatment_"), taxa,
@@ -168,7 +209,7 @@ qc_v7 <- qc_v6 %>%
                   .after = dplyr::everything()) %>% 
   # Drop old treatment columns (incl. taxon column)
   dplyr::select(-treatment_fire, -treatment_disturbance, -treatment_litter, 
-                -treatment_remove, -taxon)
+                -treatment_remove, -treatment_logging, -taxon)
 
 # Any gained/lost columns?
 supportR::diff_check(old = names(qc_v6), new = names(qc_v7))
@@ -198,8 +239,12 @@ qc_v8a <- qc_v7 %>%
 # All fixed?
 supportR::num_check(data = qc_v8a, col = resp_colnames)
 
+# Split off any data that we don't want to aggregate and are not uniquely identified
+qc_v8b <- dplyr::filter(qc_v8a, lter %in% c("SONGS"))
+qc_v8c <- dplyr::filter(qc_v8a, lter %in% c("SONGS") != T)
+
 # Now aggregate as needed
-qc_v8b <- qc_v8a %>% 
+qc_v8d <- qc_v8c %>% 
   # Make sure response columns are all true numbers
   dplyr::mutate(dplyr::across(.cols = dplyr::starts_with("response"),
                               .fns = ~ as.numeric(.))) %>% 
@@ -217,19 +262,22 @@ qc_v8b <- qc_v8a %>%
     !is.na(resp_og) ~ resp_og,
     !is.na(resp_avg) ~ resp_avg,
     T ~ resp_sum)) %>%
-  # Rename actual response column
+  # Rename actual response column & treatment column
   dplyr::rename(response = response_actual)
   
+# Recombine SONGS with others
+qc_v8e <- dplyr::bind_rows(qc_v8b, qc_v8d)
+
 # Lack responses anywhere?
 dplyr::filter(qc_v8b, is.na(response))
 
 # If any, check the original dataframe responses out for that
-dplyr::filter(qc_v8a, id %in% dplyr::filter(qc_v8b, is.na(response))$obs)
+dplyr::filter(qc_v8a, id %in% dplyr::filter(qc_v8e, is.na(response))$obs)
   
 # Tidy up that object
-qc_v9 <- qc_v8b %>% 
+qc_v9 <- qc_v8e %>% 
   # Drop all intermediary response columns & observation ID
-  dplyr::select(-dplyr::starts_with("resp_"), -obs)
+  dplyr::select(-dplyr::starts_with("resp_"), -obs, -id)
 
 # Check structure
 dplyr::glimpse(qc_v9)
