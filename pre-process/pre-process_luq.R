@@ -39,18 +39,21 @@ luq_trt_v2 <- luq_trt_v1 %>%
   dplyr::distinct()
 
 # Join!
-luq_actual <- dplyr::full_join(luq_seed_v1, luq_trt_v2,
-                               by = c("BLOCK", "PLOT"))
+luq_v1 <- dplyr::full_join(luq_seed_v1, luq_trt_v2,
+                           by = c("BLOCK", "PLOT"))
 
 # Re-check structure
-dplyr::glimpse(luq_actual)
+dplyr::glimpse(luq_v1)
 
 ## -------------------------------------------- ##
 # Export ----
 ## -------------------------------------------- ##
 
+# Make a final object
+luq_actual <- luq_v1
+
 # Decide on a nice new file name
-luq_name <- "LUQ___joined-data.csv"
+luq_name <- "LUQ___procssed-data.csv"
 
 # Export a new file locally
 write.csv(x = luq_actual, row.names = F,
