@@ -277,7 +277,9 @@ dplyr::filter(qc_v8a, id %in% dplyr::filter(qc_v8e, is.na(response))$obs)
 # Tidy up that object
 qc_v9 <- qc_v8e %>% 
   # Drop all intermediary response columns & observation ID
-  dplyr::select(-dplyr::starts_with("resp_"), -obs, -id)
+  dplyr::select(-dplyr::starts_with("resp_"), -obs, -id) %>% 
+  # Drop all columns that are *entirely* NA
+  dplyr::select(-dplyr::where(fn = ~ all(is.na(.))))
 
 # Check structure
 dplyr::glimpse(qc_v9)
