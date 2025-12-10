@@ -1,8 +1,6 @@
-## --------------------------------------------------------------------- ##
+## ---------------------------------------------------- ##
 # Material Legacy - Upload Products to Drive
-## --------------------------------------------------------------------- ##
-# Code author(s): Nick J Lyon, 
-
+## ---------------------------------------------------- ##
 # Purpose
 ## Upload data products of earlier scripts into the relevant part(s) of the Drive
 
@@ -15,6 +13,9 @@
 
 # Load libraries
 librarian::shelf(tidyverse, googledrive)
+
+# Get set up
+source(file = file.path("00_setup.R"))
 
 # Clear environment
 rm(list = ls()); gc()

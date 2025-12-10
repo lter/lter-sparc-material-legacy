@@ -1,8 +1,6 @@
-## --------------------------------------------------------------------- ##
+## ---------------------------------------------------- ##
 # Material Legacy - Wrangling
-## --------------------------------------------------------------------- ##
-# Code author(s): Nick J Lyon, 
-
+## ---------------------------------------------------- ##
 # Purpose
 ## Do quality control checks, filtering, and data structure edits
 ## Includes anything important before analysis
@@ -16,6 +14,9 @@
 
 # Load libraries
 librarian::shelf(tidyverse, supportR)
+
+# Get set up
+source(file = file.path("00_setup.R"))
 
 # Clear environment
 rm(list = ls()); gc()

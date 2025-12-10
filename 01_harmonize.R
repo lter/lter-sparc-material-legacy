@@ -1,8 +1,6 @@
-## --------------------------------------------------------------------- ##
+## ---------------------------------------------------- ##
 # Material Legacy - Harmonization
-## --------------------------------------------------------------------- ##
-# Code author(s): Nick J Lyon, 
-
+## ---------------------------------------------------- ##
 # Purpose
 ## Use a 'data key' to standardize column names and combine separate raw inputs (i.e., harmonize)
 
@@ -16,6 +14,9 @@
 
 # Load libraries
 librarian::shelf(tidyverse, ltertools, supportR)
+
+# Get set up
+source(file = file.path("00_setup.R"))
 
 # Clear environment
 rm(list = ls()); gc()

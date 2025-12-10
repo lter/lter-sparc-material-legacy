@@ -1,8 +1,6 @@
-## --------------------------------------------------------------------- ##
+## ---------------------------------------------------- ##
 # Material Legacy - Calculate Effect Sizes
-## --------------------------------------------------------------------- ##
-# Code author(s): Nick J Lyon, 
-
+## ---------------------------------------------------- ##
 # Purpose
 ## Fit models for each LTER and extract effect sizes
 
@@ -15,6 +13,9 @@
 
 # Load libraries
 librarian::shelf(tidyverse, glmmTMB, broom.mixed, ggeffects)
+
+# Get set up
+source(file = file.path("00_setup.R"))
 
 # Clear environment
 rm(list = ls()); gc()
