@@ -5,8 +5,7 @@
 ## Use a 'data key' to standardize column names and combine separate raw inputs (i.e., harmonize)
 
 # Pre-Requisites
-## Download raw data (can be done from `00_setup.R`)
-## Download data key (can be done from `00_setup.R`)
+## Download raw data & data key (can be done from `000_drive-download.R`)
 
 ## -------------------------------------------- ##
 # Housekeeping ----
