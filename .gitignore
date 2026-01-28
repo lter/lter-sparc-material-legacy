@@ -72,6 +72,7 @@ vignettes/*.pdf
 
 # Other file types
 *.pdf
+*.html
 *.zip
 
 # Data file types
