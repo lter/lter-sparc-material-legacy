@@ -1,3 +1,5 @@
+# Requires Settings → Pages → Source = GitHub Actions and Settings → Actions → Workflow permissions = Read and write.
+# A 404 "Failed to create deployment" indicates Pages is not enabled or is blocked at the org level.
 name: Deploy MkDocs site
 
 on:
