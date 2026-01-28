@@ -1,0 +1,35 @@
+site_name: "Material Legacy Effects"
+site_description: "Legacy materials and harmonization exploration for LTER-SPARC"
+site_url: "https://lter.github.io/lter-sparc-material-legacy/"
+repo_name: "lter-sparc-material-legacy"
+repo_url: "https://github.com/lter/lter-sparc-material-legacy"
+edit_uri: "edit/main/docs/"
+
+theme:
+  name: material
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.follow
+    - search.highlight
+
+nav:
+  - Home: index.md
+  - Workflow: workflow.md
+  - Repo structure: repo_structure.md
+  - Data: data.md
+  - Reference:
+      - How to use this repository: instructions.md
+      - Project notes: project_template.md
+
+plugins:
+  - search
+
+extra_css:
+  - stylesheets/extra.css
+
+not_in_nav: |
+  instructions/README.md
+  orientation/README.md
