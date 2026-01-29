@@ -34,6 +34,27 @@ devtools::check()
 rmarkdown::render("README.Rmd")
 ```
 
+## Infrastructure-first development
+
+This repository established cross-platform CI and documentation tooling
+early so contributors can build on a stable foundation. Treat CI results
+as guidance for improving reproducibility and code quality, even when a
+check is advisory. As the package matures, maintainers may tighten
+checks and make more items required.
+
+See the project documentation for more detail on infrastructure and
+reproducibility:
+<https://lter.github.io/lter-sparc-material-legacy/development/>.
+
+### Notebook → package promotion
+
+- Exploratory work can live in notebooks or scripts while ideas are
+  forming.
+- Once code is stable and reusable, move it into `R/` with tests and
+  documentation.
+- Prefer small, well-documented functions that can be reused across
+  analyses.
+
 ## Adding tests
 
 - Add tests under `tests/testthat/`.

@@ -56,6 +56,17 @@
 <code class="sourceCode R"><span><span class="fu">rmarkdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgs.rstudio.com/rmarkdown/reference/render.html" class="external-link">render</a></span><span class="op">(</span><span class="st">"README.Rmd"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="infrastructure-first-development">Infrastructure-first development<a class="anchor" aria-label="anchor" href="#infrastructure-first-development"></a></h2>
+<p>This repository established cross-platform CI and documentation tooling early so contributors can build on a stable foundation. Treat CI results as guidance for improving reproducibility and code quality, even when a check is advisory. As the package matures, maintainers may tighten checks and make more items required.</p>
+<p>See the project documentation for more detail on infrastructure and reproducibility: <a href="https://lter.github.io/lter-sparc-material-legacy/development/" class="uri">https://lter.github.io/lter-sparc-material-legacy/development/</a>.</p>
+<div class="section level3">
+<h3 id="notebook--package-promotion">Notebook → package promotion<a class="anchor" aria-label="anchor" href="#notebook--package-promotion"></a></h3>
+<ul><li>Exploratory work can live in notebooks or scripts while ideas are forming.</li>
+<li>Once code is stable and reusable, move it into <code>R/</code> with tests and documentation.</li>
+<li>Prefer small, well-documented functions that can be reused across analyses.</li>
+</ul></div>
+</div>
+<div class="section level2">
 <h2 id="adding-tests">Adding tests<a class="anchor" aria-label="anchor" href="#adding-tests"></a></h2>
 <ul><li>Add tests under <code>tests/testthat/</code>.</li>
 <li>Aim for clear, focused tests that cover new behavior.</li>
