@@ -1,6 +1,6 @@
 <div class="hero reveal">
-  <div class="kicker">Material legacy effects</div>
-  <h1>Recovery lines</h1>
+  <div class="kicker">LTER Working Group</div>
+  <h1>Material Legacy</h1>
   <p class="lede">
     Ecosystem recovery does not begin from a blank slate. It unfolds in the presence of <em>material legacies</em>—
     the living and dead biological structures left behind by foundation species after disturbance.
