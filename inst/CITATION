@@ -1,10 +1,10 @@
-citHeader("To cite lterSparcMaterialLegacy in publications use:")
+citHeader("To cite macabre in publications use:")
 
 citEntry(
   entry = "Manual",
-  title = "lterSparcMaterialLegacy: Material Legacy Effects Analysis Tools",
+  title = "macabre: Material Legacy Effects Analysis Tools",
   author = "LTER SPARC Material Legacy Team",
   year = "2024",
   note = "R package version 0.1.0",
-  url = "https://github.com/lter/lter-sparc-material-legacy"
+  url = "https://github.com/lter/macabre"
 )

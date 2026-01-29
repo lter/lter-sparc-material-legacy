@@ -1,12 +1,12 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
-title: "lterSparcMaterialLegacy"
+title: "macabre"
 type: software
 authors:
   - name: "LTER SPARC Material Legacy Team"
     email: "maintainer@example.com"
-repository-code: "https://github.com/lter/lter-sparc-material-legacy"
-url: "https://github.com/lter/lter-sparc-material-legacy"
+repository-code: "https://github.com/lter/macabre"
+url: "https://github.com/lter/macabre"
 abstract: "Tools and workflows for analyzing material legacy effects in LTER SPARC projects."
 license: "MIT"
 version: "0.1.0"

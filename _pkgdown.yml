@@ -1,5 +1,4 @@
-url: https://lter.github.io/lter-sparc-material-legacy/
-destination: site
-
+url: https://lter.github.io/macabre/
 template:
   bootstrap: 5
+destination: site
