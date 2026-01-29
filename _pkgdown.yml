@@ -1,4 +1,5 @@
 url: https://lter.github.io/lter-sparc-material-legacy/
+destination: site
 
 template:
   bootstrap: 5
