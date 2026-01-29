@@ -17,12 +17,15 @@ theme:
 
 nav:
   - Home: index.md
+  - Project:
+      - Overview: project/overview.md
+      - Objectives: project/objectives.md
+      - Team and management: project/team.md
+      - Timeline: project/timeline.md
+      - Outputs and impacts: project/outputs.md
+  - Data:
+      - Sources: data/sources.md
   - Workflow: workflow.md
-  - Repo structure: repo_structure.md
-  - Data: data.md
-  - Reference:
-      - How to use this repository: instructions.md
-      - Project notes: project_template.md
 
 plugins:
   - search
@@ -34,4 +37,3 @@ extra_css:
 not_in_nav: |
   instructions/README.md
   orientation/README.md
-
