@@ -40,4 +40,4 @@ jobs:
 
       - name: Lint
         if: steps.rfiles.outputs.run == 'true'
-        run: R -q -e "lintr::lint_package(error_on = 'never')"
+        run: R -q -e "print(lintr::lint_package()); quit(status = 0)"
