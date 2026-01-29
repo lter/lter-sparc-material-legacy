@@ -1,17 +1,67 @@
-<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>https://lter.github.io/macabre/404.html</loc></url>
-<url><loc>https://lter.github.io/macabre/CODE_OF_CONDUCT.html</loc></url>
-<url><loc>https://lter.github.io/macabre/CONTRIBUTING.html</loc></url>
-<url><loc>https://lter.github.io/macabre/GOVERNANCE.html</loc></url>
-<url><loc>https://lter.github.io/macabre/LICENSE-text.html</loc></url>
-<url><loc>https://lter.github.io/macabre/LICENSE.html</loc></url>
-<url><loc>https://lter.github.io/macabre/PULL_REQUEST_TEMPLATE.html</loc></url>
-<url><loc>https://lter.github.io/macabre/SECURITY.html</loc></url>
-<url><loc>https://lter.github.io/macabre/authors.html</loc></url>
-<url><loc>https://lter.github.io/macabre/index.html</loc></url>
-<url><loc>https://lter.github.io/macabre/news/index.html</loc></url>
-<url><loc>https://lter.github.io/macabre/reference/hello_material_legacy.html</loc></url>
-<url><loc>https://lter.github.io/macabre/reference/index.html</loc></url>
-<url><loc>https://lter.github.io/macabre/reference/macabre-package.html</loc></url>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/data/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/development/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/instructions/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/project_template/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/repo_structure/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/workflow/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/data/sources/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/instructions/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/orientation/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/overrides/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/project/objectives/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/project/outputs/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/project/overview/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/project/team/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/project/timeline/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
 </urlset>
-
