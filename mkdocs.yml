@@ -43,9 +43,19 @@ nav:
 plugins:
   - search
 
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
 extra_css:
   - stylesheets/theme.css
   - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/site.js
 
 
 not_in_nav: |
