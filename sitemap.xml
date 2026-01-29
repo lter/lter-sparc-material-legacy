@@ -9,10 +9,6 @@
          <lastmod>2026-01-29</lastmod>
     </url>
     <url>
-         <loc>https://lter.github.io/lter-sparc-material-legacy/development/</loc>
-         <lastmod>2026-01-29</lastmod>
-    </url>
-    <url>
          <loc>https://lter.github.io/lter-sparc-material-legacy/instructions/</loc>
          <lastmod>2026-01-29</lastmod>
     </url>
@@ -21,15 +17,31 @@
          <lastmod>2026-01-29</lastmod>
     </url>
     <url>
-         <loc>https://lter.github.io/lter-sparc-material-legacy/repo_structure/</loc>
-         <lastmod>2026-01-29</lastmod>
-    </url>
-    <url>
-         <loc>https://lter.github.io/lter-sparc-material-legacy/workflow/</loc>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/contributing/how-to-contribute/</loc>
          <lastmod>2026-01-29</lastmod>
     </url>
     <url>
          <loc>https://lter.github.io/lter-sparc-material-legacy/data/sources/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/getting-started/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/getting-started/development/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/getting-started/repo-structure/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/getting-started/workflow/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/guides/</loc>
          <lastmod>2026-01-29</lastmod>
     </url>
     <url>
@@ -62,6 +74,10 @@
     </url>
     <url>
          <loc>https://lter.github.io/lter-sparc-material-legacy/project/timeline/</loc>
+         <lastmod>2026-01-29</lastmod>
+    </url>
+    <url>
+         <loc>https://lter.github.io/lter-sparc-material-legacy/reference/</loc>
          <lastmod>2026-01-29</lastmod>
     </url>
 </urlset>
