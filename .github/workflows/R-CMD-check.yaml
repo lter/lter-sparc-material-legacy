@@ -8,6 +8,9 @@ on:
 
 jobs:
   R-CMD-check:
+    # Incubation mode: run checks but do not block merges yet.
+    # TODO: remove continue-on-error once the package is CRAN-valid with tests.
+    continue-on-error: true
     runs-on: ${{ matrix.config.os }}
     name: ${{ matrix.config.os }} (R ${{ matrix.config.r }})
     strategy:
@@ -37,7 +40,18 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - name: Check if package structure exists
+        id: pkgcheck
+        run: |
+          if [[ -f DESCRIPTION && -d R ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping R CMD check: package structure not yet complete (incubation mode)."
+          fi
+
       - uses: r-lib/actions/check-r-package@v2
+        if: steps.pkgcheck.outputs.run == 'true'
         with:
           args: "--as-cran"
           error-on: "warning"

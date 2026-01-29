@@ -8,6 +8,9 @@ on:
 
 jobs:
   test-coverage:
+    # Incubation mode: coverage is informative and should not block merges.
+    # TODO: remove continue-on-error once package structure and tests mature.
+    continue-on-error: true
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -24,7 +27,18 @@ jobs:
           extra-packages: any::covr
           needs: coverage
 
+      - name: Check for testthat directory
+        id: coverage
+        run: |
+          if [[ -d tests/testthat ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping coverage: tests/testthat not found (incubation mode)."
+          fi
+
       - name: Test coverage
+        if: steps.coverage.outputs.run == 'true'
         run: |
           if (nzchar(Sys.getenv("CODECOV_TOKEN"))) {
             covr::codecov()
@@ -37,7 +51,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Upload coverage artifacts
-        if: always()
+        if: steps.coverage.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: coverage

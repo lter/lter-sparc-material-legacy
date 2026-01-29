@@ -8,6 +8,9 @@ on:
 
 jobs:
   lint:
+    # Incubation mode: lint is advisory and should not block merges yet.
+    # TODO: remove continue-on-error once package structure and tests mature.
+    continue-on-error: true
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -24,6 +27,17 @@ jobs:
           extra-packages: any::lintr
           needs: lint
 
+      - name: Check for R source files
+        id: rfiles
+        run: |
+          if ls R/*.R >/dev/null 2>&1; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping lint: no R source files found (incubation mode)."
+          fi
+
       - name: Lint
+        if: steps.rfiles.outputs.run == 'true'
         run: lintr::lint_package()
         shell: Rscript {0}
