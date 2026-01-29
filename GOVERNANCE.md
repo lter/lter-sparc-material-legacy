@@ -22,3 +22,9 @@ among current maintainers.
 1. Update `NEWS.md` with the release notes.
 2. Run `R CMD check --as-cran`.
 3. Tag the release and publish on GitHub.
+
+## Evolving quality standards
+
+Maintainers may tighten CI rules and documentation requirements over time as
+the project matures. Any changes to enforcement will be documented and
+communicated in release notes or governance updates.
