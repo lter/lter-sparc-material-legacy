@@ -11,6 +11,12 @@ This project was formerly distributed under the package name
 provide a short, memorable name for collaborators. If you have the old
 package installed locally, remove it and reinstall `macabre`.
 
+## CI policy
+
+- Pull requests run a lightweight R CMD check (Ubuntu + R release).
+- Full matrix checks can be run manually from the GitHub Actions tab and
+  run weekly on schedule.
+
 ## Purpose
 
 `macabre` provides shared utilities and workflows for analyzing material
