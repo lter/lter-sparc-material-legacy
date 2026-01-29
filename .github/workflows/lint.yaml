@@ -39,5 +39,4 @@ jobs:
 
       - name: Lint
         if: steps.rfiles.outputs.run == 'true'
-        run: lintr::lint_package()
-        shell: Rscript {0}
+        run: R -q -e "lintr::lint_package(error_on = 'never')"

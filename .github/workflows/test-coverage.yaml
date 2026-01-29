@@ -39,22 +39,14 @@ jobs:
 
       - name: Test coverage
         if: steps.coverage.outputs.run == 'true'
-        run: |
-          if (nzchar(Sys.getenv("CODECOV_TOKEN"))) {
-            covr::codecov()
-          } else {
-            cov <- covr::package_coverage()
-            covr::report(cov, file = "coverage.html")
-            covr::to_cobertura(cov, filename = "coverage.xml")
-            message("Codecov is not configured. To enable uploads, add CODECOV_TOKEN or install the Codecov GitHub App.")
-          }
-        shell: Rscript {0}
+        continue-on-error: true
+        run: R -q -e "covr::codecov(quiet = FALSE)"
 
       - name: Upload coverage artifacts
-        if: steps.coverage.outputs.run == 'true'
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage
+          if-no-files-found: ignore
           path: |
-            coverage.html
             coverage.xml

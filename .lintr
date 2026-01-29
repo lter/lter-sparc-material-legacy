@@ -1,3 +1,11 @@
 linters: lintr::linters_with_defaults(
   line_length_linter = lintr::line_length_linter(120)
 )
+exclusions: list(
+  "renv",
+  "docs",
+  "inst",
+  "man",
+  "vignettes",
+  ".github"
+)
