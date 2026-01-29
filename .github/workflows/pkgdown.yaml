@@ -29,6 +29,9 @@ jobs:
         run: pkgdown::build_site(new_process = FALSE, install = TRUE)
         shell: Rscript {0}
 
+      - name: Disable Jekyll for GitHub Pages
+        run: touch site/.nojekyll
+
       - name: Deploy to gh-pages
         if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4.6.1
