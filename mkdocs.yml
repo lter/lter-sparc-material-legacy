@@ -11,11 +11,20 @@ theme:
   favicon: assets/favicon.svg
   palette:
     - scheme: default
-      primary: cornflower blue
-      accent: cornflower blue
+      primary: blue
+      accent: blue
   features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
     - navigation.tabs
     - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - search.suggest
     - toc.follow
     - search.highlight
 
@@ -35,6 +44,7 @@ plugins:
   - search
 
 extra_css:
+  - stylesheets/theme.css
   - stylesheets/extra.css
 
 

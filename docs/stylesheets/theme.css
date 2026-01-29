@@ -1,0 +1,96 @@
+/* =========================
+   Brand + Material tokens
+   ========================= */
+:root {
+  --brand: #6495ED;           /* cornflower blue */
+  --brand-strong: #3B78E7;
+  --brand-soft: rgba(100,149,237,0.14);
+
+  --ink: rgba(0,0,0,0.87);
+  --muted: rgba(0,0,0,0.62);
+  --hairline: rgba(0,0,0,0.10);
+
+  --radius: 16px;
+  --shadow: 0 10px 30px rgba(0,0,0,0.10);
+
+  --md-primary-fg-color: var(--brand);
+  --md-primary-fg-color--dark: var(--brand-strong);
+  --md-primary-fg-color--light: #8AB4FF;
+  --md-accent-fg-color: var(--brand);
+  --md-accent-fg-color--transparent: var(--brand-soft);
+}
+
+/* Typography polish */
+.md-typeset {
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+.md-typeset h1 { letter-spacing: -0.02em; }
+.md-typeset h2 { letter-spacing: -0.015em; }
+.md-typeset h3 { letter-spacing: -0.01em; }
+
+/* Links */
+.md-typeset a {
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+.md-typeset a:hover {
+  text-decoration-thickness: 0.12em;
+}
+
+/* Tables */
+.md-typeset table:not([class]) {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.md-typeset table:not([class]) th {
+  background: rgba(100,149,237,0.08);
+}
+
+/* Grid + cards */
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+.grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+@media (max-width: 900px) {
+  .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
+}
+
+.card {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 1.1rem;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(6px);
+  transition: all 180ms ease;
+}
+.card:hover {
+  box-shadow: var(--shadow);
+  border-color: rgba(100,149,237,0.35);
+  transform: translateY(-1px);
+}
+
+/* Hero block */
+.hero {
+  border: 1px solid rgba(100,149,237,0.25);
+  background: linear-gradient(180deg, rgba(100,149,237,0.16), rgba(255,255,255,0));
+  border-radius: calc(var(--radius) + 6px);
+  padding: 1.6rem;
+  margin: 0.2rem 0 1.2rem 0;
+}
+.hero .kicker {
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+}
+.hero .title { margin: 0.4rem 0; }
+.hero .lede {
+  color: var(--muted);
+  max-width: 70ch;
+}
