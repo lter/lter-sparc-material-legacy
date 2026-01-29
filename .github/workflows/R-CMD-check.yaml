@@ -51,10 +51,19 @@ jobs:
           fi
         shell: bash
 
-      - uses: r-lib/actions/check-r-package@v2
-        if: steps.pkgcheck.outputs.run == 'true'
+      - name: Check package (PR)
+        uses: r-lib/actions/check-r-package@v2
+        if: steps.pkgcheck.outputs.run == 'true' && github.event_name == 'pull_request'
         with:
-          args: "--as-cran"
+          args: 'c("--no-manual")'
+          build_args: 'c("--no-manual")'
+
+      - name: Check package (push)
+        uses: r-lib/actions/check-r-package@v2
+        if: steps.pkgcheck.outputs.run == 'true' && github.event_name == 'push'
+        with:
+          args: 'c("--no-manual", "--as-cran")'
+          build_args: 'c("--no-manual")'
 
       - name: Upload check results
         if: failure()
