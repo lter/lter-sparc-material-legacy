@@ -1,0 +1,12 @@
+^\.github$
+^\.Rproj\.user$
+^.*\.Rproj$
+^README\.Rmd$
+^_pkgdown\.yml$
+^pkgdown$
+^docs$
+^site$
+^codecov\.yml$
+^\.editorconfig$
+^\.lintr$
+^CITATION\.cff$

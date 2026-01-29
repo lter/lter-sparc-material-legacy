@@ -1,0 +1,28 @@
+name: Bug report
+description: File a bug report
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: What happened? What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reprex
+    attributes:
+      label: Reproducible example
+      description: Provide a minimal reproducible example (reprex).
+      render: R
+    validations:
+      required: true
+  - type: textarea
+    id: sessioninfo
+    attributes:
+      label: Session info
+      description: Paste the output of `sessionInfo()`.
+      render: R
+    validations:
+      required: true

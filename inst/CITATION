@@ -1,0 +1,10 @@
+citHeader("To cite lterSparcMaterialLegacy in publications use:")
+
+citEntry(
+  entry = "Manual",
+  title = "lterSparcMaterialLegacy: Material Legacy Effects Analysis Tools",
+  author = "LTER SPARC Material Legacy Team",
+  year = "2024",
+  note = "R package version 0.1.0",
+  url = "https://github.com/lter/lter-sparc-material-legacy"
+)
