@@ -55,7 +55,6 @@ jobs:
         if: steps.pkgcheck.outputs.run == 'true'
         with:
           args: "--as-cran"
-          error-on: "never"
 
       - name: Upload check results
         if: failure()
