@@ -11,9 +11,9 @@ macabre is an R package and analysis repository for the LTER SPARC synthesis pro
 This project was formerly distributed under the package name `lterSparcMaterialLegacy`. The package has been renamed to `macabre` to provide a short, memorable name for collaborators. If you have the old package installed locally, remove it and reinstall `macabre`.
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/lter/macabre/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/lter/macabre/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/lter/macabre/branch/main/graph/badge.svg)](https://codecov.io/gh/lter/macabre)
-[![pkgdown](https://github.com/lter/macabre/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/lter/macabre/actions/workflows/pkgdown.yaml)
+[![R-CMD-check](https://github.com/lter/lter-sparc-material-legacy/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/lter/lter-sparc-material-legacy/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/lter/lter-sparc-material-legacy/branch/main/graph/badge.svg)](https://codecov.io/gh/lter/lter-sparc-material-legacy)
+[![pkgdown](https://github.com/lter/lter-sparc-material-legacy/actions/workflows/pkgdown.yaml/badge.svg?branch=main)](https://github.com/lter/lter-sparc-material-legacy/actions/workflows/pkgdown.yaml)
 <!-- badges: end -->
 
 ## Purpose
