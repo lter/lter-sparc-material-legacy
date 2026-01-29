@@ -46,3 +46,16 @@ Ecosystems around the world are increasingly shaped by disturbance—from wildfi
 This synthesis project asks a simple but unresolved question: when do material legacies help ecosystems recover, and when do they slow or redirect recovery? By leveraging long-term ecological research (LTER) time series from twelve marine and terrestrial ecosystem types, we examine how the amount, persistence, and ecological role of material legacies influence the rate and extent of ecosystem recovery following disturbance.
 
 Through cross-ecosystem comparisons and data harmonization, the project aims to identify general patterns in how material legacies shape resilience, while retaining the system-specific context needed to understand underlying mechanisms. The results will inform both ecological theory and management decisions, helping anticipate how ecosystems may respond as disturbance regimes continue to change under global environmental change.
+
+## Project infrastructure and reproducibility
+
+This project is built around an open R package that supports shared data
+handling, harmonization, and analysis. We intentionally established this
+infrastructure early so that the science can progress with consistent, reusable
+tools from the start. The goal is to make cross-site synthesis reproducible and
+transparent as the project grows, while keeping the focus on the ecological
+questions that motivate the work.
+
+You can explore the codebase on [GitHub](https://github.com/lter/lter-sparc-material-legacy)
+and browse the package documentation on the
+[pkgdown site](https://lter.github.io/lter-sparc-material-legacy/).

@@ -36,6 +36,8 @@ nav:
       - Team and management: project/team.md
       - Timeline: project/timeline.md
       - Outputs and impacts: project/outputs.md
+  - Project development:
+      - Development & Infrastructure: development.md
   - Data:
       - Sources: data/sources.md
   - Workflow: workflow.md
