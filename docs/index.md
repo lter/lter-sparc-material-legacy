@@ -1,3 +1,15 @@
+<div class="hero">
+  <div class="kicker">Material legacy effects</div>
+  <h1 class="title">Recovery lines</h1>
+  <p class="lede">How the biological structures left behind by disturbance shape ecosystem recovery across marine and terrestrial LTER sites.</p>
+</div>
+
+<div class="grid cols-3">
+  <div class="card"><h3>Objectives</h3><p>Quantify and synthesize how material legacies influence recovery rate and extent.</p></div>
+  <div class="card"><h3>Data</h3><p>Long-term time series from 12 marine and terrestrial LTER ecosystem types.</p></div>
+  <div class="card"><h3>Outputs</h3><p>Peer-reviewed synthesis papers and a harmonized dataset archived to EDI.</p></div>
+</div>
+
 ## About the project
 
 Ecosystems around the world are increasingly shaped by disturbance—from wildfires and droughts on land to heatwaves and mass mortality events in the ocean. After these disturbances, recovery does not begin from a blank slate. Instead, it unfolds in the presence of *material legacies*: the living and dead biological structures left behind by foundation species such as trees, corals, grasses, kelps, oysters, and mangroves.
