@@ -38,7 +38,6 @@ For the broader project overview and public-facing updates, visit the
 
 ## How to use this package (for now)
 
-- Install from GitHub with `pak::pak("lter/macabre")`.
 - Load the package with
   [`library(macabre)`](https://lter.github.io/macabre/).
 - Expect a small, evolving set of helper functions focused on
@@ -46,13 +45,6 @@ For the broader project overview and public-facing updates, visit the
   matures.
 
 ## Installation
-
-You can install the development version from GitHub:
-
-``` r
-# install.packages("pak")
-pak::pak("lter/macabre")
-```
 
 ## Website
 
