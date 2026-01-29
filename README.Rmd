@@ -1,3 +1,7 @@
+---
+output: github_document
+---
+
 # lterSparcMaterialLegacy
 
 <!-- badges: start -->
@@ -15,14 +19,14 @@ community.
 
 ## Installation
 
-``` r
+```r
 # install.packages("remotes")
 remotes::install_github("lter/lter-sparc-material-legacy")
 ```
 
 ## Quick example
 
-``` r
+```r
 library(lterSparcMaterialLegacy)
 
 hello_material_legacy("LTER")
