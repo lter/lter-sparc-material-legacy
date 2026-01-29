@@ -36,6 +36,7 @@ jobs:
             echo "run=false" >> "$GITHUB_OUTPUT"
             echo "Skipping coverage: tests/testthat not found (incubation mode)."
           fi
+        shell: bash
 
       - name: Test coverage
         if: steps.coverage.outputs.run == 'true'
