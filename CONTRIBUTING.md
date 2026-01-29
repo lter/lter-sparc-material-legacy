@@ -1,4 +1,4 @@
-# Contributing to lterSparcMaterialLegacy
+# Contributing to macabre
 
 Thanks for your interest in contributing! We welcome issues,
 documentation improvements, and pull requests.
@@ -43,8 +43,7 @@ check is advisory. As the package matures, maintainers may tighten
 checks and make more items required.
 
 See the project documentation for more detail on infrastructure and
-reproducibility:
-<https://lter.github.io/lter-sparc-material-legacy/development/>.
+reproducibility: <https://lter.github.io/macabre/development/>.
 
 ### Notebook → package promotion
 

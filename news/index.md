@@ -1,5 +1,5 @@
 # Changelog
 
-## lterSparcMaterialLegacy 0.1.0
+## macabre 0.1.0
 
 - Initial package scaffold with community tooling.

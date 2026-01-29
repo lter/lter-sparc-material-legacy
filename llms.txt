@@ -1,15 +1,26 @@
-# lterSparcMaterialLegacy
+# macabre
+
+macabre is an R package and analysis repository for the LTER SPARC
+synthesis project on **ecological legacies of dead foundation species**
+across marine and terrestrial ecosystems.
+
+## Package rename (important)
+
+This project was formerly distributed under the package name
+`lterSparcMaterialLegacy`. The package has been renamed to `macabre` to
+provide a short, memorable name for collaborators. If you have the old
+package installed locally, remove it and reinstall `macabre`.
 
 ## Purpose
 
-`lterSparcMaterialLegacy` provides shared utilities and workflows for
-analyzing material legacy effects in LTER SPARC projects. It is designed
-to make collaboration on datasets, analyses, and reporting consistent
-across the community.
+`macabre` provides shared utilities and workflows for analyzing material
+legacy effects in LTER SPARC projects. It is designed to make
+collaboration on datasets, analyses, and reporting consistent across the
+community.
 
 ## Project status
 
-- **Package name:** `lterSparcMaterialLegacy`.
+- **Package name:** `macabre`.
 - **Current purpose:** infrastructure plus early utilities that support
   data harmonization, documentation, and reproducible analysis.
 - **Expected growth:** functions and datasets will expand as the project
@@ -17,29 +28,37 @@ across the community.
   publication-ready outputs.
 
 For the broader project overview and public-facing updates, visit the
-[project website](https://lter.github.io/lter-sparc-material-legacy/).
+[project website](https://lter.github.io/macabre/).
 
 ## How to use this package (for now)
 
-- Install from GitHub with
-  `remotes::install_github("lter/lter-sparc-material-legacy")`.
+- Install from GitHub with `pak::pak("lter/macabre")`.
 - Load the package with
-  [`library(lterSparcMaterialLegacy)`](https://github.com/lter/lter-sparc-material-legacy).
+  [`library(macabre)`](https://lter.github.io/macabre/).
 - Expect a small, evolving set of helper functions focused on
   infrastructure; interfaces may change as the scientific workflow
   matures.
 
 ## Installation
 
+You can install the development version from GitHub:
+
 ``` r
-# install.packages("remotes")
-remotes::install_github("lter/lter-sparc-material-legacy")
+# install.packages("pak")
+pak::pak("lter/macabre")
 ```
+
+## Website
+
+Package documentation is published automatically as a pkgdown site. If
+the website looks out of date or fails to update, check the GitHub
+Actions logs. The `gh-pages` branch is generated output—do not edit it
+by hand.
 
 ## Quick example
 
 ``` r
-library(lterSparcMaterialLegacy)
+library(macabre)
 
 hello_material_legacy("LTER")
 ```
@@ -68,14 +87,13 @@ across sites and workflows.
 - Update documentation with `devtools::document()`.
 - Add NEWS entries for user-facing changes.
 
-See
-[CONTRIBUTING.md](https://lter.github.io/lter-sparc-material-legacy/CONTRIBUTING.md)
+See [CONTRIBUTING.md](https://lter.github.io/macabre/CONTRIBUTING.md)
 for the full contributor guide.
 
 # Package index
 
 ## All functions
 
-- [`hello_material_legacy()`](https://lter.github.io/lter-sparc-material-legacy/reference/hello_material_legacy.md)
+- [`hello_material_legacy()`](https://lter.github.io/macabre/reference/hello_material_legacy.md)
   : Say hello to the material legacy project
 

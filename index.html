@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Material Legacy Effects Analysis Tools • lterSparcMaterialLegacy</title>
+<title>Material Legacy Effects Analysis Tools • macabre</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -20,7 +20,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="index.html">lterSparcMaterialLegacy</a>
+    <a class="navbar-brand me-2" href="index.html">macabre</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
@@ -38,7 +38,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/lter/lter-sparc-material-legacy/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/lter/macabre/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -47,49 +47,61 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="ltersparcmateriallegacy">lterSparcMaterialLegacy<a class="anchor" aria-label="anchor" href="#ltersparcmateriallegacy"></a>
+<div class="page-header"><h1 id="macabre">macabre<a class="anchor" aria-label="anchor" href="#macabre"></a>
 </h1></div>
+<p>macabre is an R package and analysis repository for the LTER SPARC synthesis project on <strong>ecological legacies of dead foundation species</strong> across marine and terrestrial ecosystems.</p>
+<div class="section level2">
+<h2 id="package-rename-important">Package rename (important)<a class="anchor" aria-label="anchor" href="#package-rename-important"></a>
+</h2>
+<p>This project was formerly distributed under the package name <code>lterSparcMaterialLegacy</code>. The package has been renamed to <code>macabre</code> to provide a short, memorable name for collaborators. If you have the old package installed locally, remove it and reinstall <code>macabre</code>.</p>
 <!-- badges: start -->
 
+</div>
 <div class="section level2">
 <h2 id="purpose">Purpose<a class="anchor" aria-label="anchor" href="#purpose"></a>
 </h2>
-<p><code>lterSparcMaterialLegacy</code> provides shared utilities and workflows for analyzing material legacy effects in LTER SPARC projects. It is designed to make collaboration on datasets, analyses, and reporting consistent across the community.</p>
+<p><code>macabre</code> provides shared utilities and workflows for analyzing material legacy effects in LTER SPARC projects. It is designed to make collaboration on datasets, analyses, and reporting consistent across the community.</p>
 </div>
 <div class="section level2">
 <h2 id="project-status">Project status<a class="anchor" aria-label="anchor" href="#project-status"></a>
 </h2>
 <ul>
 <li>
-<strong>Package name:</strong> <code>lterSparcMaterialLegacy</code>.</li>
+<strong>Package name:</strong> <code>macabre</code>.</li>
 <li>
 <strong>Current purpose:</strong> infrastructure plus early utilities that support data harmonization, documentation, and reproducible analysis.</li>
 <li>
 <strong>Expected growth:</strong> functions and datasets will expand as the project moves from exploratory work to cross-site synthesis and publication-ready outputs.</li>
 </ul>
-<p>For the broader project overview and public-facing updates, visit the <a href="https://lter.github.io/lter-sparc-material-legacy/">project website</a>.</p>
+<p>For the broader project overview and public-facing updates, visit the <a href="https://lter.github.io/macabre/">project website</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="how-to-use-this-package-for-now">How to use this package (for now)<a class="anchor" aria-label="anchor" href="#how-to-use-this-package-for-now"></a>
 </h2>
 <ul>
-<li>Install from GitHub with <code>remotes::install_github("lter/lter-sparc-material-legacy")</code>.</li>
-<li>Load the package with <code><a href="https://github.com/lter/lter-sparc-material-legacy" class="external-link">library(lterSparcMaterialLegacy)</a></code>.</li>
+<li>Install from GitHub with <code>pak::pak("lter/macabre")</code>.</li>
+<li>Load the package with <code><a href="https://lter.github.io/macabre/">library(macabre)</a></code>.</li>
 <li>Expect a small, evolving set of helper functions focused on infrastructure; interfaces may change as the scientific workflow matures.</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p>You can install the development version from GitHub:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"lter/lter-sparc-material-legacy"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"lter/macabre"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="website">Website<a class="anchor" aria-label="anchor" href="#website"></a>
+</h2>
+<p>Package documentation is published automatically as a pkgdown site. If the website looks out of date or fails to update, check the GitHub Actions logs. The <code>gh-pages</code> branch is generated output—do not edit it by hand.</p>
 </div>
 <div class="section level2">
 <h2 id="quick-example">Quick example<a class="anchor" aria-label="anchor" href="#quick-example"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lter/lter-sparc-material-legacy" class="external-link">lterSparcMaterialLegacy</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lter.github.io/macabre/">macabre</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/hello_material_legacy.html">hello_material_legacy</a></span><span class="op">(</span><span class="st">"LTER"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -123,8 +135,8 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/lter/lter-sparc-material-legacy/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/lter/lter-sparc-material-legacy/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/lter/macabre/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/lter/macabre/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -147,7 +159,7 @@
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing lterSparcMaterialLegacy</a></li>
+<li><a href="authors.html#citation">Citing macabre</a></li>
 </ul>
 </div>
 
@@ -161,9 +173,9 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/lter/lter-sparc-material-legacy/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/lter/lter-sparc-material-legacy/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/gh/lter/lter-sparc-material-legacy" class="external-link"><img src="https://codecov.io/gh/lter/lter-sparc-material-legacy/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://github.com/lter/lter-sparc-material-legacy/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/lter/lter-sparc-material-legacy/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
+<li><a href="https://github.com/lter/macabre/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/lter/macabre/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://codecov.io/gh/lter/macabre" class="external-link"><img src="https://codecov.io/gh/lter/macabre/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/lter/macabre/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/lter/macabre/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
 </ul>
 </div>
 
