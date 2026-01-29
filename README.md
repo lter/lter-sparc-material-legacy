@@ -12,6 +12,11 @@ This project was formerly distributed under the package name `lterSparcMaterialL
 [![pkgdown](https://github.com/lter/macabre/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/lter/macabre/actions/workflows/pkgdown.yaml)
 <!-- badges: end -->
 
+## CI policy
+
+- Pull requests run a lightweight R CMD check (Ubuntu + R release).
+- Full matrix checks can be run manually from the GitHub Actions tab and run weekly on schedule.
+
 ## Purpose
 
 `macabre` provides shared utilities and workflows for analyzing
