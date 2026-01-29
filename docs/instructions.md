@@ -4,8 +4,8 @@ This site summarizes the legacy materials in this repository and points to the p
 
 ## Key pages
 
-- [Workflow](workflow.md) for the raw → tidy → graphs flow and where scripts live.
-- [Repo structure](repo_structure.md) for a quick map of folders and intent.
+- [Workflow](getting-started/workflow.md) for the raw → tidy → graphs flow and where scripts live.
+- [Repo structure](getting-started/repo-structure.md) for a quick map of folders and intent.
 - [Data](data.md) for expected raw and tidy conventions (with TODOs where sources are unknown).
 
 ## Deployment checklist (GitHub Pages)

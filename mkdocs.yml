@@ -22,6 +22,7 @@ theme:
     - navigation.sections
     - navigation.indexes
     - navigation.top
+    - content.action.edit
     - content.code.copy
     - content.code.annotate
     - content.tabs.link
@@ -31,18 +32,25 @@ theme:
 
 nav:
   - Home: index.md
-  - Project:
-      - Overview: project/overview.md
+  - Getting started:
+      - Overview: getting-started/index.md
+      - Workflow: getting-started/workflow.md
+      - Repository structure: getting-started/repo-structure.md
+      - Development & infrastructure: getting-started/development.md
+  - Guides:
+      - Overview: guides/README.md
+  - Science / Concepts:
+      - Project overview: project/overview.md
       - Objectives: project/objectives.md
-      - Team and management: project/team.md
-      - Timeline: project/timeline.md
       - Outputs and impacts: project/outputs.md
-  - Project development:
-      - Development & Infrastructure: development.md
   - Data:
+      - Data overview: data.md
       - Sources: data/sources.md
-  - Workflow: workflow.md
-  - "Macabre R package": /lter-sparc-material-legacy/pkgdown/
+  - Reference:
+      - Overview: reference/index.md
+      - Package reference (pkgdown): https://lter.github.io/lter-sparc-material-legacy/pkgdown/
+  - Contributing:
+      - How to contribute: contributing/how-to-contribute.md
 
 plugins:
   - search

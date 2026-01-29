@@ -9,7 +9,7 @@
   <div class="btnrow">
     <a class="btn" href="project/overview/">Project overview</a>
     <a class="btn" href="data/sources/">Data sources</a>
-    <a class="btn" href="workflow/">Workflow</a>
+    <a class="btn" href="getting-started/workflow/">Workflow</a>
   </div>
 </div>
 
@@ -18,7 +18,7 @@
   <a href="project/overview/">overview</a> ·
   <a href="project/objectives/">objectives</a> ·
   <a href="data/sources/">sites & ecosystem types</a> ·
-  <a href="workflow/">repo workflow</a>
+  <a href="getting-started/workflow/">repo workflow</a>
 </div>
 
 <div class="grid cols-3 reveal">
@@ -58,4 +58,4 @@ questions that motivate the work.
 
 You can explore the codebase on [GitHub](https://github.com/lter/lter-sparc-material-legacy)
 and browse the package documentation on the
-[pkgdown site](https://lter.github.io/lter-sparc-material-legacy/).
+[pkgdown site](https://lter.github.io/lter-sparc-material-legacy/pkgdown/).
