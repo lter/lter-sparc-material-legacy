@@ -42,6 +42,7 @@ nav:
   - Data:
       - Sources: data/sources.md
   - Workflow: workflow.md
+  - "R package reference": /lter-sparc-material-legacy/pkgdown/
 
 plugins:
   - search

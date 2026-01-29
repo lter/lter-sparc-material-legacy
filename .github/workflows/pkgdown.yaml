@@ -38,5 +38,6 @@ jobs:
         with:
           branch: gh-pages
           folder: site
+          target-folder: pkgdown
           clean: true
           token: ${{ secrets.GITHUB_TOKEN }}
