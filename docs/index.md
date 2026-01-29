@@ -56,6 +56,6 @@ tools from the start. The goal is to make cross-site synthesis reproducible and
 transparent as the project grows, while keeping the focus on the ecological
 questions that motivate the work.
 
-You can explore the codebase on [GitHub](https://github.com/lter/macabre)
+You can explore the codebase on [GitHub](https://github.com/lter/lter-sparc-material-legacy)
 and browse the package documentation on the
-[pkgdown site](https://lter.github.io/macabre/).
+[pkgdown site](https://lter.github.io/lter-sparc-material-legacy/).
