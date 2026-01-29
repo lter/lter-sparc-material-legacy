@@ -1,0 +1,78 @@
+---
+title: "Site authoring worked example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Site authoring worked example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+## What this does
+
+This vignette walks through creating a new site standardizer with a simple
+example. Use it as a reference when you start your own site file.
+
+## What you need
+
+- The site template
+- A site identifier such as `NEWSITE`
+- A small set of raw data you can map into the canonical tables
+
+## Step-by-step
+
+### 1) Create a new site file
+
+```r
+ml_new_site_file("NEWSITE")
+```
+
+### 2) Translate raw data into the canonical tables
+
+Example (simplified):
+
+```r
+obs <- tibble::tibble(
+  site_id = "NEWSITE",
+  system_id = "NEWSITE__deadwood__growth__01",
+  plot_id = "plot-1",
+  date = as.Date("2020-06-01"),
+  year = 2020L,
+  design = factor("observational", levels = ml_vocab()$design),
+  legacy_type = factor("deadwood", levels = ml_vocab()$legacy_type),
+  legacy_metric = "volume",
+  legacy_value = 1.5,
+  legacy_unit = "m3",
+  response_type = factor("growth", levels = ml_vocab()$response_type),
+  response_metric = "biomass",
+  response_value = 2.1,
+  response_unit = "g"
+)
+```
+
+### 3) Register your site
+
+```r
+ml_registry <- function() {
+  list(
+    EXAMPLE = standardize_EXAMPLE,
+    HFR = standardize_HFR,
+    NEWSITE = standardize_NEWSITE
+  )
+}
+```
+
+### 4) Run the quickcheck
+
+```r
+ml_quickcheck_site("NEWSITE", inputs = list(path = "path/to/raw"))
+```
+
+## Common mistakes
+
+- Missing columns in `obs` or `systems`.
+- Factor values that are not in the allowed vocabularies.
+- `system_id` values that do not match between `obs` and `systems`.
