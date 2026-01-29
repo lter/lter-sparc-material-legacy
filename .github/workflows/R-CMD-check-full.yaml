@@ -1,9 +1,9 @@
-name: R-CMD-check (light)
+name: R-CMD-check (full)
 
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * 1"
 
 jobs:
   R-CMD-check:
@@ -17,6 +17,9 @@ jobs:
       matrix:
         config:
           - {os: ubuntu-latest, r: 'release'}
+          - {os: ubuntu-latest, r: 'devel'}
+          - {os: windows-latest, r: 'release'}
+          - {os: macos-latest, r: 'release'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -47,16 +50,9 @@ jobs:
           fi
         shell: bash
 
-      - name: Check package (PR)
+      - name: Check package (full)
         uses: r-lib/actions/check-r-package@v2
-        if: steps.pkgcheck.outputs.run == 'true' && github.event_name == 'pull_request'
-        with:
-          args: 'c("--no-manual")'
-          build_args: 'c("--no-manual")'
-
-      - name: Check package (push)
-        uses: r-lib/actions/check-r-package@v2
-        if: steps.pkgcheck.outputs.run == 'true' && github.event_name == 'push'
+        if: steps.pkgcheck.outputs.run == 'true'
         with:
           args: 'c("--no-manual", "--as-cran")'
           build_args: 'c("--no-manual")'
