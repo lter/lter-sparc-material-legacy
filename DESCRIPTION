@@ -1,4 +1,4 @@
-Package: lterSparcMaterialLegacy
+Package: macabre
 Title: Material Legacy Effects Analysis Tools
 Version: 0.1.0
 Authors@R: c(
@@ -7,9 +7,8 @@ Authors@R: c(
 Description: Tools and shared workflows for analyzing material legacy effects
     in LTER SPARC projects.
 License: MIT + file LICENSE
-URL: https://github.com/lter/lter-sparc-material-legacy,
-    https://lter.github.io/lter-sparc-material-legacy/
-BugReports: https://github.com/lter/lter-sparc-material-legacy/issues
+URL: https://lter.github.io/macabre/
+BugReports: https://github.com/lter/macabre/issues
 Depends:
     R (>= 3.5.0)
 Suggests:

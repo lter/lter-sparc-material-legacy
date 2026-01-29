@@ -1,4 +1,4 @@
 library(testthat)
-library(lterSparcMaterialLegacy)
+library(macabre)
 
-test_check("lterSparcMaterialLegacy")
+test_check("macabre")

@@ -24,7 +24,7 @@ and reuse workflows from the beginning instead of retrofitting them later.
 
 **Now**
 
-- Core R package scaffold (`lterSparcMaterialLegacy`) with consistent structure.
+- Core R package scaffold (`macabre`) with consistent structure.
 - Utilities and early helper functions that support data handling and analysis.
 - Documentation, vignettes, and a public pkgdown site for discoverability.
 

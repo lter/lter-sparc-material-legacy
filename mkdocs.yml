@@ -1,8 +1,8 @@
 site_name: "Material Legacy Effects"
 site_description: "Legacy materials and harmonization exploration for LTER-SPARC"
-site_url: "https://lter.github.io/lter-sparc-material-legacy/"
-repo_name: "lter-sparc-material-legacy"
-repo_url: "https://github.com/lter/lter-sparc-material-legacy"
+site_url: "https://lter.github.io/macabre/"
+repo_name: "macabre"
+repo_url: "https://github.com/lter/macabre"
 edit_uri: "edit/main/docs/"
 
 theme:
