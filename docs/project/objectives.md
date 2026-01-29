@@ -5,7 +5,7 @@ Use this page to capture general notes about legacy workflows, decisions, and ne
 ## Checklist (update as needed)
 
 - [ ] Confirm current project owner or point of contact. **TODO**
-- [ ] Record data sources and update the [Data notes](data.md) page.
+- [ ] Record data sources and update the [Data notes](../data/sources.md) page.
 - [ ] Document any required R packages or system dependencies.
 - [ ] Note known gaps, incomplete analyses, or missing outputs.
 
