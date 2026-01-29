@@ -36,19 +36,13 @@ For the broader project overview and public-facing updates, visit the
 
 ## How to use this package (for now)
 
-- Install from GitHub with `pak::pak("lter/macabre")`.
 - Load the package with `library(macabre)`.
 - Expect a small, evolving set of helper functions focused on infrastructure;
   interfaces may change as the scientific workflow matures.
 
 ## Installation
 
-You can install the development version from GitHub:
 
-```r
-# install.packages("pak")
-pak::pak("lter/macabre")
-```
 
 ## Website
 
