@@ -28,6 +28,13 @@ library(lterSparcMaterialLegacy)
 hello_material_legacy("LTER")
 ```
 
+## pkgdown site
+
+- The pkgdown site is rebuilt automatically on merges to the default branch.
+- The `gh-pages` branch is generated output; do not edit it by hand.
+- If the site breaks, check the GitHub Actions logs for the `pkgdown` workflow.
+- GitHub Pages should be configured to serve from the `gh-pages` branch (root).
+
 ## Contributing
 
 - Run tests with `devtools::test()`.
