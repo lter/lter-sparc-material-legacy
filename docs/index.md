@@ -1,27 +1,7 @@
-# Material Legacy Effects
+## About the project
 
-This repository captures legacy materials and exploratory work related to LTER-SPARC material legacy effects. The current focus is on organizing historical inputs and testing approaches for data harmonization across sites, rather than establishing new analytical outcomes.
+Ecosystems around the world are increasingly shaped by disturbance—from wildfires and droughts on land to heatwaves and mass mortality events in the ocean. After these disturbances, recovery does not begin from a blank slate. Instead, it unfolds in the presence of *material legacies*: the living and dead biological structures left behind by foundation species such as trees, corals, grasses, kelps, oysters, and mangroves.
 
-## Entrypoint
+This synthesis project asks a simple but unresolved question: **when do material legacies help ecosystems recover, and when do they slow or redirect recovery?** By leveraging long-term ecological research (LTER) time series from twelve marine and terrestrial ecosystem types, we examine how the amount, persistence, and ecological role of material legacies influence the *rate* and *extent* of ecosystem recovery following disturbance.
 
-The primary entrypoint is `00_setup.R`. Running this script initializes the expected data directories and supporting outputs:
-
-- `data/raw`
-- `data/raw/not-ready`
-- `data/tidy`
-- `graphs`
-
-## Repo map
-
-- `Sandbox/`: Ad-hoc experiments, scratch analyses, and exploratory notebooks/scripts. Expect mixed maturity and incomplete notes.
-- `explore_centralized-harmonization/`: Work-in-progress exploration of centralized harmonization workflows and related artifacts.
-
-## Getting started
-
-1. Ensure R is available with the packages referenced in the scripts you plan to run.
-2. Run `00_setup.R` from the repository root.
-3. Review generated folder structure and any logs or output files created in the process.
-
-## Status / Legacy note
-
-This repository is a legacy workspace. Current status, ownership, and next steps are **TODO** and should be clarified in future updates.
+Through cross-ecosystem comparisons and data harmonization, the project aims to identify general patterns in how material legacies shape resilience, while retaining the system-specific context needed to understand underlying mechanisms. The results will inform both ecological theory and management decisions, helping anticipate how ecosystems may respond as disturbance regimes continue to change under global environmental change.

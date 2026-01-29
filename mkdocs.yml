@@ -9,6 +9,10 @@ theme:
   name: material
   logo: assets/logo.svg
   favicon: assets/favicon.svg
+  palette:
+    - scheme: default
+      primary: cornflower blue
+      accent: cornflower blue
   features:
     - navigation.tabs
     - navigation.sections
