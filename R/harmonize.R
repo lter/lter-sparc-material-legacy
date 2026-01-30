@@ -64,7 +64,7 @@ harmonize_material_legacies <- function(
   }
 
   if (is.null(inputs)) {
-    inputs <- setNames(
+    inputs <- stats::setNames(
       lapply(sites, function(site) list(path = file.path("data/raw", site))),
       sites
     )

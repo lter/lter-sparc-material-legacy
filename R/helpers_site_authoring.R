@@ -146,7 +146,7 @@ ml_quickcheck_site <- function(site_id, inputs = list(), strict = TRUE) {
 
   result <- harmonize_material_legacies(
     sites = site_id,
-    inputs = setNames(list(inputs), site_id),
+    inputs = stats::setNames(list(inputs), site_id),
     strict = strict,
     continue_on_error = FALSE,
     return_site_outputs = TRUE,

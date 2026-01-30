@@ -71,21 +71,15 @@ ml_cov_extract_gridmet <- function(cube, locations_sf, vars, dt, res, agg_space)
       stop("Extraction output missing value column.", call. = FALSE)
     }
 
-    out <- extracted |>
-      dplyr::mutate(
-        .ml_row_id = .data[[id_col]],
-        date = as.Date(.data[[time_col]])
-      ) |>
-      dplyr::select(.ml_row_id, date, value = .data[[value_col]])
+    extracted$.ml_row_id <- extracted[[id_col]]
+    extracted$date <- as.Date(extracted[[time_col]])
+    extracted$value <- extracted[[value_col]]
 
+    out <- extracted[, c(".ml_row_id", "date", "value")]
     out <- dplyr::left_join(locations_tbl, out, by = ".ml_row_id")
-    out |>
-      dplyr::transmute(
-        site_id = .data$site_id,
-        plot_id = .data$plot_id,
-        date = .data$date,
-        !!paste0("clim_", var_name) := .data$value
-      )
+    out <- dplyr::select(out, site_id, plot_id, date, value)
+    names(out)[4] <- paste0("clim_", var_name)
+    tibble::as_tibble(out)
   }
 
   if (is.list(cube) && !inherits(cube, "gdalcubes_cube")) {
@@ -198,7 +192,7 @@ ml_add_covariates <- function(
     cov_join <- cov_tbl
     if (join %in% c("plot_year", "site_year")) {
       cov_join <- cov_join |>
-        dplyr::mutate(year = as.integer(format(.data$date, "%Y"))) |>
+        dplyr::mutate(year = as.integer(format(date, "%Y"))) |>
         dplyr::select(-date)
     }
 
