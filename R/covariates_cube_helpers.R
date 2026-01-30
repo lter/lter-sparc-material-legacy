@@ -53,9 +53,8 @@ ml_cube_from_local_netcdf <- function(
   )
 
   if (is.null(view)) {
-    extent <- gdalcubes::collection_extent(collection)
     view <- gdalcubes::cube_view(
-      extent = extent,
+      collection,
       srs = srs,
       dx = res[1],
       dy = res[2],
