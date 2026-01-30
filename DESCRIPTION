@@ -11,12 +11,18 @@ URL: https://lter.github.io/macabre/
 BugReports: https://github.com/lter/macabre/issues
 Depends:
     R (>= 3.5.0)
+Imports:
+    dplyr,
+    tibble,
+    vctrs
 Suggests:
     covr,
+    gdalcubes,
     knitr,
     lintr,
     pkgdown,
     rmarkdown,
+    sf,
     spelling,
     testthat (>= 3.0.0)
 VignetteBuilder:

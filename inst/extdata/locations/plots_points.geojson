@@ -1,0 +1,27 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "site_id": "HFR",
+        "plot_id": "HFR-1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-119.98, 44.98]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "site_id": "HFR",
+        "plot_id": "HFR-2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-119.94, 44.94]
+      }
+    }
+  ]
+}

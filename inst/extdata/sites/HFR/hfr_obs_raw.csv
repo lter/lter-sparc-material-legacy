@@ -1,0 +1,4 @@
+plot_id,date,legacy_volume_m3,response_biomass_g,design
+HFR-1,2019-06-15,1.2,2.4,observational
+HFR-1,2020-06-15,1.4,2.9,observational
+HFR-2,2019-06-20,0.8,1.9,experimental
