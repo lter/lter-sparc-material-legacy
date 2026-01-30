@@ -7,11 +7,22 @@
 <url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/LICENSE.html</loc></url>
 <url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/PULL_REQUEST_TEMPLATE.html</loc></url>
 <url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/SECURITY.html</loc></url>
+<url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/articles/adding-a-site.html</loc></url>
+<url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/articles/covariates-climate.html</loc></url>
+<url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/articles/index.html</loc></url>
+<url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/articles/site-authoring-worked-example.html</loc></url>
 <url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/authors.html</loc></url>
 <url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/index.html</loc></url>
 <url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/news/index.html</loc></url>
+<url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/reference/harmonize_material_legacies.html</loc></url>
 <url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/reference/hello_material_legacy.html</loc></url>
 <url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/reference/index.html</loc></url>
 <url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/reference/macabre-package.html</loc></url>
+<url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/reference/ml_add_covariates.html</loc></url>
+<url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/reference/ml_cov_gridmet_spec.html</loc></url>
+<url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/reference/ml_cube_from_local_netcdf.html</loc></url>
+<url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/reference/ml_list_sites.html</loc></url>
+<url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/reference/ml_new_site_file.html</loc></url>
+<url><loc>https://lter.github.io/lter-sparc-material-legacy/pkgdown/reference/ml_quickcheck_site.html</loc></url>
 </urlset>
 

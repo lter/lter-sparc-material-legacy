@@ -1,72 +1,46 @@
 # Contributing to macabre
 
-Thanks for your interest in contributing! We welcome issues,
-documentation improvements, and pull requests.
+Thank you for your interest in contributing. This project welcomes site
+contributors and collaborators.
 
-## Getting started
+This repository includes: - The R package (code, tests, and vignettes) -
+A separate MkDocs website in the top-level `docs/` directory
 
-1.  Fork the repository and create your branch from `main`.
-2.  Install development dependencies:
+Please do not edit `docs/` or `mkdocs.yml` when you are working on the R
+package.
 
-``` r
-install.packages(c("devtools", "roxygen2", "testthat"))
-```
+## Adding or updating a site
 
-3.  Run the tests:
+If you are a site contributor, you only need to touch your site
+standardizer and the registry that lists available sites.
 
-``` r
-devtools::test()
-```
-
-4.  Run a full check before opening a PR:
+Start by creating a new site standardizer file:
 
 ``` r
-devtools::check()
+ml_new_site_file("NEWSITE")
 ```
 
-## Documentation
-
-- Update documentation with `devtools::document()` after changing
-  exported functions.
-- Re-render `README.Rmd` if you change the README:
+Then: 1. Edit `R/sites/site_NEWSITE.R` to read your raw data and build
+the canonical tables (`obs` and `systems`). 2. Register your site in
+`ml_registry()`. 3. Run a quick diagnostic check:
 
 ``` r
-rmarkdown::render("README.Rmd")
+ml_quickcheck_site("NEWSITE", inputs = list(path = "path/to/raw"))
 ```
 
-## Infrastructure-first development
+4.  Run tests and open a pull request.
 
-This repository established cross-platform CI and documentation tooling
-early so contributors can build on a stable foundation. Treat CI results
-as guidance for improving reproducibility and code quality, even when a
-check is advisory. As the package matures, maintainers may tighten
-checks and make more items required.
+## Core package development (maintainers only)
 
-See the project documentation for more detail on infrastructure and
-reproducibility: <https://lter.github.io/macabre/development/>.
+Core changes include the harmonizer, schema, and covariate tools. These
+files should only be changed by maintainers or by request in an issue.
+If you are not sure, please open an issue first.
 
-### Notebook → package promotion
+## If something goes wrong
 
-- Exploratory work can live in notebooks or scripts while ideas are
-  forming.
-- Once code is stable and reusable, move it into `R/` with tests and
-  documentation.
-- Prefer small, well-documented functions that can be reused across
-  analyses.
+Validation errors are expected while you are building a site
+standardizer. The error messages are meant to be read literally. Fix the
+issue in your site standardizer rather than trying to bypass validation.
 
-## Adding tests
-
-- Add tests under `tests/testthat/`.
-- Aim for clear, focused tests that cover new behavior.
-
-## NEWS
-
-Add a short entry to `NEWS.md` for user-facing changes.
-
-## Contribution expectations
-
-- Keep pull requests small and focused when possible.
-- Link to an issue for larger changes.
-- Provide a reproducible example (reprex) for bugs.
-
-Thank you for helping make this project better!
+If you are stuck, open an issue and include the error message and a
+short summary of your data.
