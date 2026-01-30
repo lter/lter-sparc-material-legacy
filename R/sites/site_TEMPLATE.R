@@ -28,8 +28,8 @@ standardize_TEMPLATE <- function(path, ...) {
   # Step-by-step worksheet
   # ---------------------------------------------------------------------------
   # 1) Read your raw data files.
-  # raw_obs <- read.csv(file.path(path, "observations.csv"))
-  # raw_systems <- read.csv(file.path(path, "systems.csv"))
+  # raw_obs <- utils::read.csv(file.path(path, "observations.csv"))
+  # raw_systems <- utils::read.csv(file.path(path, "systems.csv"))
 
   # 2) Create the obs table (one row per plot per date).
   # obs <- tibble::tibble(

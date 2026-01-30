@@ -77,7 +77,7 @@ ml_cov_extract_gridmet <- function(cube, locations_sf, vars, dt, res, agg_space)
 
     out <- extracted[, c(".ml_row_id", "date", "value")]
     out <- dplyr::left_join(locations_tbl, out, by = ".ml_row_id")
-    out <- dplyr::select(out, site_id, plot_id, date, value)
+    out <- dplyr::select(out, "site_id", "plot_id", "date", "value")
     names(out)[4] <- paste0("clim_", var_name)
     tibble::as_tibble(out)
   }

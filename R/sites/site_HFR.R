@@ -16,8 +16,8 @@ standardize_HFR <- function(path = NULL, use_fixture = FALSE, ...) {
     stop(sprintf("Missing HFR systems file: %s", systems_file), call. = FALSE)
   }
 
-  raw_obs <- read.csv(obs_file, stringsAsFactors = FALSE)
-  raw_systems <- read.csv(systems_file, stringsAsFactors = FALSE)
+  raw_obs <- utils::read.csv(obs_file, stringsAsFactors = FALSE)
+  raw_systems <- utils::read.csv(systems_file, stringsAsFactors = FALSE)
 
   system_id <- "HFR__deadwood__growth__01"
 
