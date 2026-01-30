@@ -44,6 +44,13 @@ nav:
   - Data:
       - Data overview: data.md
       - Sources: data/sources.md
+  - R Package:
+      - Overview: package/index.md
+      - Install: package/install.md
+      - Quickstart: package/quickstart.md
+      - Harmonization workflow: package/harmonization.md
+      - Covariates (climate): package/covariates.md
+      - Function index: package/functions.md
   - Reference:
       - Overview: reference/index.md
       - Package reference (pkgdown): https://lter.github.io/lter-sparc-material-legacy/pkgdown/
