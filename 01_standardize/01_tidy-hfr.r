@@ -34,66 +34,41 @@ rm(list = ls()); gc()
 ## -------------------------------------------- ##
 
 # Read in the relevant file(s)
-hfr_tree_v01 <- read.csv(file.path("data", "raw", "00_HFR__hf126-02-tree.csv"))
+hfr_sap_v01 <- read.csv(file.path("data", "raw", "00_HFR__hf106-05-sapling.csv"))
 
 # Check structure
-dplyr::glimpse(hfr_tree_v01)
+dplyr::glimpse(hfr_sap_v01)
 
-# Begin doing actual wrangling/tidying
-hfr_tree_v02 <- hfr_tree_v01 %>% 
-  dplyr::mutate(species = gsub(pattern = " ", replacement = "", x = species)) %>% 
+# Do necessary wrangling / tidying
+hfr_sap_v02 <- hfr_sap_v01 %>% 
   dplyr::mutate(
-    dbht0 = dplyr::case_when(
-      ## [ABP]: "trees 3606, 3902, 1901, 3920, and 3900 dbh in 2004 was more than 20cm greater than 2009 and subsequent meas. Change these to dbh09."
-      tree %in% c(3902, 1901, 3920, 3900, 3606, 3911) ~ dbh09,
-      ## [ABP]: "trees 2721, 6701, 4173, 5300, and 3239 grew more than 10cm between 2004 and 2009. It's pretty clear what the correct value should be for 2004 for these."
-      tree == 2721 ~ 57.0, #dbht0 was recorded as 37.0
-      tree == 3239 ~ 48.5, #dbht0 was recorded as 38.5
-      tree == 4173 ~ 67.0, #dbht0 was recorded as 57.0
-      tree == 5300 ~ 43.2, #dbht0 was recorded as 33.2
-      tree == 6701 ~ 69.1, #dbht0 was recorded as 59.1
-      TRUE ~ dbht0)) %>% 
-  dplyr::mutate(
-    BAm204 = ifelse(condt0 %in% c('L', 'R'), yes = (pi*((dbht0/200)^2)), no = NA),
-    BAm209 = ifelse(cond09 %in% c('L', 'R'), yes = (pi*((dbh09/2)^200)), no = NA),
-    BAm214 = ifelse(cond14 %in% c('L', 'R'), yes = (pi*((dbh14/2)^200)), no = NA),
-    BAm219 = ifelse(cond19 %in% c('L', 'R'), yes = (pi*((dbh19/2)^200)), no = NA),
-    BAm224 = ifelse(cond24 %in% c('L', 'R'), yes = (pi*((dbh24/2)^200)), no = NA)
-  ) %>% 
-  dplyr::mutate(
-    size.ha = dplyr::case_when(
-      plot %in% c(1, 3) ~ (90*85)/10000,
-      plot == 2 ~ (85^2)/10000,(90^2)/10000,
-      plot == 7 ~ 0.6000),
-    block = ifelse(plot %in% c(1:3, 8), yes = "valley", no = "ridge"),
+    species = ifelse(is.na(species), yes = "none", no = species),
+    spgr = dplyr::case_when(
+      species == "ACRU" ~ "red maple",
+      species %in% c("BELE", "BEAL", "BEPA", "BEPO") ~ "birch",
+      species == "PIST" ~ "white pine", 
+      species %in% c("QURU", "QUVE","QUAL", "QUBI") ~ "oak",
+      species == "TSCA" ~ "hemlock",
+      TRUE ~ "other hardwood"),
     trt = dplyr::case_when(
       plot %in% c(1, 5) ~ "girdled",
       plot %in% c(2, 4) ~ "logged",
       plot %in% c(3, 6) ~ "hemlock",
       TRUE ~ "hardwood"),
-    spgr = dplyr::case_when(
-      species == "ACRU" ~ "red maple",
-      species %in% c('BELE', 'BEAL', 'BEPA', 'BEPO') ~ 'birch',
-      species == 'PIST' ~ 'white pine', 
-      species %in% c('QURU', 'QUVE','QUAL', 'QUBI') ~ 'oak',
-      species == 'TSCA' ~ 'hemlock',
-      TRUE ~ "other hardwood")) %>% 
-  dplyr::mutate(
-    intervalt04 = NA,
-    intervalt09 = ifelse(cond09 %in% c('L','D'), yes = 2009 - yeart0, no = NA),
-    intervalt09 = ifelse(intervalt09 == 0, yes = 5, no = intervalt09),
-    intervalt141924 = 5
-  )
+    block = ifelse(plot %in% c(1:3, 8), yes = "valley", no = "ridge"),
+    n.ha = total / 0.09) # [ABP]: "divide by size of center section of plot"
 
 # Check structure
-dplyr::glimpse(hfr_tree_v02)
+dplyr::glimpse(hfr_sap_v02)
 
-# Exclude some rows/columns
-hfr_tree_v03 <- hfr_tree_v02 %>% 
-  dplyr::filter(tolower(note14) != "off hf" | is.na(note14))
+# Summarize to get density
+hfr_sap_v03 <- hfr_sap_v02 %>% 
+  dplyr::group_by(plot, trt, block, year, species, spgr) %>% 
+  dplyr::summarize(density.ha = sum(n.ha, na.rm = TRUE),
+  .groups = "drop")
 
 # Check structure
-dplyr::glimpse(hfr_tree_v03)
+dplyr::glimpse(hfr_sap_v03)
 
 ## -------------------------------------------- ##
 # Tidy Hemlock Data ----
@@ -163,7 +138,7 @@ hfr_v99 <- hfr_v05 %>%
 dplyr::glimpse(hfr_v99)
 
 # Export locally
-write.csv(hfr_v99, row.names = FALSE, na = '',
+write.csv(hfr_v99, row.names = FALSE, na = "",
   file = file.path("data", "standard", "01_HFR_hemlock-removal.csv"))
 
 # End ----
