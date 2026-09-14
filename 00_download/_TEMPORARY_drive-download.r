@@ -32,21 +32,6 @@ purrr::walk2(.x = conts$id, .y = conts$name,
     path = file.path("data", "from-drive", .y)))
 
 ## -------------------------------------------- ##
-# Download HFR Data ----
-## -------------------------------------------- ##
-
-# Identify relevant Drive folder link
-url <- googledrive::as_id("https://drive.google.com/drive/folders/1mSEdIbcvuUdOeqrTVFFDvcAnlR2JniUI")
-
-# Get the contents of that folder
-(conts <- googledrive::drive_ls(path = url))
-
-# Download 'em (overwriting local copies if needed)
-purrr::walk2(.x = conts$id, .y = conts$name,
-  .f = ~ googledrive::drive_download(file = .x, overwrite = TRUE,
-    path = file.path("data", "from-drive", .y)))
-
-## -------------------------------------------- ##
 # Download MCR Data ----
 ## -------------------------------------------- ##
 # Identify relevant Drive folder link
