@@ -20,6 +20,49 @@ source(file.path("-setup.r"))
 rm(list = ls()); gc()
 
 ## -------------------------------------------- ##
+# Identify Focal Plots ----
+## -------------------------------------------- ##
+
+# Load dead data
+# and_plots_v01 <- read.csv(file = file.path("data", "from-drive", "OHJA_downed wood summary_v2.csv")) %>% 
+#   janitor::clean_names()
+
+# # Check structure
+# dplyr::glimpse(and_plots_v01)
+
+# # Pare down to just what is needed
+# and_plots_v02 <- and_plots_v01 %>% 
+#   dplyr::select(stand, plot, cwd_year = year) %>% 
+#   dplyr::distinct()
+
+# # Check structure
+# dplyr::glimpse(and_plots_v02)
+
+## -------------------------------------------- ##
+# Parse Tree Data ----
+## -------------------------------------------- ##
+
+# # Load relevant files
+# init <- read.csv(file.path("data", "raw", "00_AND__Initial tree conditions with spatial coordinates.csv"))
+# str(init)
+
+
+# tree <- read.csv(file.path("data", "raw", "00_AND__Individual tree remeasurement.csv"))
+# str(tree)
+
+# message("Number of trees = ", length(unique(tree$TREEID)))
+
+# mort <- read.csv(file.path("data", "raw", "00_AND__Individual tree mortality.csv"))
+# str(mort)
+
+
+# meas <- read.csv(file.path("data", "from-drive", "TP00112_v13.csv")) %>% 
+#   dplyr::mutate(StandID = substr(PLOTID,1,4),
+#   Plot = as.integer(substr(PLOTID,5,8)),
+#   .before = dplyr::everything())
+# str(meas)
+
+## -------------------------------------------- ##
 # Load Live & Dead Wood Data ----
 ## -------------------------------------------- ##
 
