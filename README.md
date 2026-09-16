@@ -1,6 +1,6 @@
 # LTER SPARC Group: Material Legacy Effects
 
-Principal Investigators: _Dr. Kai L. Kopecky, Dr. Katharine N. Suding, Dr. Ty A. Tuff_
+Principal Investigators: _Dr. Kai L. Kopecky, Dr. Katharine N. Suding, Dr. Ty A. Tuff, Dr. Max Castorani_
 
 ## Workflow Explanation
 
