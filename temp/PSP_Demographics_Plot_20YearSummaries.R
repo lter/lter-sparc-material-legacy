@@ -10,19 +10,22 @@ rm(list = ls()); gc()
 
 #On EDI: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-and.2742.28
 #Note that the version number might be slightly different
-mort_data = read.csv(file.path("data", "raw", "00_AND__Individual tree mortality.csv"))
-str(mort_data)
+mort_data = read.csv(file.path("data", "raw", "00_AND__Individual tree mortality.csv")) %>% 
+  dplyr::filter(SPECIES == "PSME")
+dplyr::glimpse(mort_data)
 
-tree_data = read.csv(file.path("data", "raw", "00_AND__Individual tree remeasurement.csv"))
-str(tree_data)
+tree_data = read.csv(file.path("data", "raw", "00_AND__Individual tree remeasurement.csv")) %>% 
+    dplyr::filter(SPECIES == "PSME")
+dplyr::glimpse(tree_data)
 
-init_data = read.csv(file.path("data", "raw", "00_AND__Initial tree conditions with spatial coordinates.csv"))
-str(init_data)
+init_data = read.csv(file.path("data", "raw", "00_AND__Initial tree conditions with spatial coordinates.csv")) %>% 
+  dplyr::filter(SPECIES == "PSME")
+dplyr::glimpse(init_data)
 
 #On HJA website: https://andrewsforest.oregonstate.edu/data/datacatalog/TP001
 #Note that the version number might be slightly different
 meas_data = read.csv(file.path("data", "from-drive", "TP00112_v13.csv"))
-str(meas_data)
+dplyr::glimpse(meas_data)
 
 #based on Kai's code and https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-and.4032.10
 SiteSummaries <- read.csv(file.path("data", "from-drive", "OHJA_downed wood summary_v2.csv"))
@@ -272,8 +275,7 @@ final_df <- purrr::list_rbind(out_sp_st_pl)
 #           row.names = FALSE)
 
 # #only Douglas-fir: I think that this is the one we used!!!
-write.csv(final_df[final_df$Species == "PSME",],
-          file.path("data", "AND_test-out.csv"), 
+write.csv(final_df, file.path("data", "AND_test-out.csv"), 
           # Originally: "PSP_Plot_Change_20year_PSME_v2.csv"
           row.names = FALSE)
 
