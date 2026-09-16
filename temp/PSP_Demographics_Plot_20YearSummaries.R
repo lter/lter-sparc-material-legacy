@@ -1,0 +1,273 @@
+# Objective: Calculate tree density and basal area change (growth, mortality, and ingrowth)
+## for each species and plot. Only TV010
+
+#clear workspace
+
+rm(list = ls())
+
+# working directory. Reset based on your own Box folders
+
+dir_data = "C:/Users/dmbell/Box/External PNW_Forest_Dynamics/PSP/treedata/TV010"
+dir_output = "C:/Users/dmbell/Box/External PNW_Forest_Dynamics/PSP/DataRequests/KopeckyKai"
+
+# TV010 data locations
+## file.path() combines text strings into a file path (useful modification of paste)
+
+#On EDI: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-and.2742.28
+#Note that the version number might be slightly different
+mort_data = read.csv(file.path(dir_data, "TV01003_v19.csv"), header = TRUE)
+
+tree_data = read.csv(file.path(dir_data, "TV01002_v19.csv"), header = TRUE)
+
+init_data = read.csv(file.path(dir_data, "TV01001_v2.csv"), header = TRUE)
+
+#On HJA website: https://andrewsforest.oregonstate.edu/data/datacatalog/TP001
+#Note that the version number might be slightly different
+meas_data = read.csv(file.path(dir_data, "TP00112_v13.csv"), header = TRUE)
+
+#based on Kai's code and https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-and.4032.10
+SiteSummaries <- read.csv(file.path(dir_output, "OHJA_downed wood summary_v2.csv"), header = TRUE)
+
+#Break up plot ID into stand and plot for meas_data
+meas_data = cbind(meas_data,
+                  StandID = substr(meas_data$PLOTID,1,4),
+                  Plot = as.integer(substr(meas_data$PLOTID,5,8)))
+
+
+#Print total number of stands and trees
+message(paste0("Number of trees = ", length(unique(tree_data$TREEID))))
+
+# Set appropriate study IDs to use
+## For this example, I selected down to the reference stands and Growth and Yield plots
+## because stands are a continuous grouping of plots. I am ignoring the watershed stands,
+## though I think that they are super important and we will want to incororate at some point
+## This just reduces the data that you have to process and work with. 
+
+#if null, assume including everything
+#StudyIDs = c("HJRS","MRRS","PPGY", "NFGY", "HSGY", "DFGY")
+
+StudyIDs <- NULL
+
+# Censor out any data not from these studies
+if(!is.null(StudyIDs)){
+  mort_data = mort_data[mort_data$PSP_STUDYID %in% StudyIDs,]
+  tree_data = tree_data[tree_data$PSP_STUDYID %in% StudyIDs,]
+  init_data = init_data[init_data$PSP_STUDYID %in% StudyIDs,]
+  meas_data = meas_data[meas_data$StandID %in% tree_data$STANDID,]
+}
+
+#Print total number of trees after censoring
+message(paste0("Number of trees after censoring = ", length(unique(tree_data$TREEID))))
+
+# Set appropriate stand IDs to use based on down wood
+StandIDs <- unique(SiteSummaries$stand)
+
+
+if(!is.null(StandIDs)){
+  mort_data = mort_data[mort_data$STANDID %in% StandIDs,]
+  tree_data = tree_data[tree_data$STANDID %in% StandIDs,]
+  init_data = init_data[init_data$STANDID %in% StandIDs,]
+  meas_data = meas_data[meas_data$StandID %in% tree_data$STANDID,]
+}
+
+#Print total number of trees after censoring
+message(paste0("Number of trees after censoring = ", length(unique(tree_data$TREEID))))
+
+# Get appropriate plots
+PlotIDs <- paste(SiteSummaries$stand,SiteSummaries$plot)
+PlotYears <- SiteSummaries$year
+
+if(!is.null(PlotIDs)){
+  mort_data = mort_data[paste(mort_data$STANDID,mort_data$PLOTNUMBER) %in% PlotIDs,]
+  tree_data = tree_data[paste(tree_data$STANDID,tree_data$PLOTNUMBER) %in% PlotIDs,]
+  init_data = init_data[paste(init_data$STANDID,init_data$PLOTNUMBER) %in% PlotIDs,]
+  meas_data = meas_data[paste(meas_data$StandID,meas_data$Plot) %in% PlotIDs,]
+}
+
+#ensure that species in init_data euqls species in tree_data
+for(j in 1:nrow(init_data))
+  init_data$SPECIES[j] <- tree_data$SPECIES[tree_data$TREEID == init_data$TREEID[j]][1]
+
+#Print total number of trees after censoring
+message(paste0("Number of trees after censoring = ", length(unique(tree_data$TREEID))))
+
+#Generate for each plot the growth and mortality over a ~20 year window following dead wood
+
+
+SpeciesUniq = sort(names(table(init_data$SPECIES)))
+
+out_sp_st_pl = list()
+
+#iterate over ss = {1, ..., number of species}
+for(sp in 1:length(SpeciesUniq)){
+  
+  #subselect data to focal species [TEMPORARY VARAIABLE]
+  tree_spp = tree_data[which(tree_data$SPECIES == SpeciesUniq[sp]),]
+  
+  # create vector of stands with at least 100 trees of the focal species 
+  StandUniq = sort(names(table(tree_spp$STANDID)))
+  StandPlotUniq = sort(names(table(paste(tree_spp$STANDID,tree_spp$PLOTNUMBER))))
+  
+  rm(list = "tree_spp")
+  
+  #create list to hold output
+  out_st_pl = list()
+  
+  for(st in 1:length(StandUniq)){
+    
+    #subselect data to focal stand within the focal species
+    mort_std = mort_data[mort_data$STANDID == StandUniq[st],]
+    tree_std = tree_data[tree_data$STANDID == StandUniq[st],]
+    init_std = init_data[init_data$STANDID == StandUniq[st],]
+    meas_std = meas_data[meas_data$StandID == StandUniq[st],]
+    
+    SP_tmp <- unique(paste(tree_std$STANDID,tree_std$PLOTNUMBER))
+    
+    out_pl = list()
+    
+    for(pl in 1:length(SP_tmp)){
+      
+      CWD_year = PlotYears[PlotIDs == SP_tmp[pl]]
+      
+      mort_pl = mort_std[mort_std$PLOTNUMBER == unlist(strsplit(SP_tmp[pl]," "))[2],]
+      tree_pl = tree_std[tree_std$PLOTNUMBER == unlist(strsplit(SP_tmp[pl]," "))[2],]
+      init_pl = init_std[init_std$PLOTNUMBER == unlist(strsplit(SP_tmp[pl]," "))[2],]
+      meas_pl = meas_std[meas_std$Plot == unlist(strsplit(SP_tmp[pl]," "))[2],]
+      
+      # create data.frame with years of measurement (year) and whether that measurement is a full measurement (Type) 
+      YearUniq = data.frame(year = unique(sort(unique(meas_pl$YEAR_RAW))),
+                            establishment = FALSE, 
+                            remeasurememnt = FALSE,
+                            mortality = FALSE,
+                            aggYear = NA)
+      #sets establishment to TRUE if any plots in stand established or plot addition that year
+      YearUniq$establishment[YearUniq$year %in% meas_pl$YEAR_RAW[meas_pl$ACTIVITY %in% c("A","E")]] = TRUE
+      #sets remeasuremement to TRUE if any plots in stand remeasured that year
+      YearUniq$remeasurememnt[YearUniq$year %in% meas_pl$YEAR_RAW[meas_pl$ACTIVITY == "R"]] = TRUE
+      #sets mortality to TRUE if any plots in stand remeasured or checked for mortality that year
+      YearUniq$mortality[YearUniq$year %in% meas_pl$YEAR_RAW[meas_pl$ACTIVITY == "R"]] = TRUE
+      YearUniq$mortality[YearUniq$year %in% meas_pl$YEAR_RAW[meas_pl$ACTIVITY == "M"]] = TRUE
+      
+      #get aggreate year
+      for(j in 1:nrow(YearUniq))
+        YearUniq$aggYear[j] = median(meas_pl$YEAR_AGG[meas_pl$YEAR_RAW == YearUniq$year[j]])
+      
+      #check tree and mort data for additional years
+      treeYearMissing <- unique(tree_pl$YEAR[! tree_pl$YEAR %in% YearUniq$year])
+      
+      if(length(treeYearMissing) > 0) 
+        YearUniq <- rbind(YearUniq,cbind(year = treeYearMissing,
+                                         establishment = FALSE,
+                                         remeasurememnt = TRUE,
+                                         mortality = TRUE,
+                                         aggYear = treeYearMissing))
+      
+      mortYearMissing <- unique(mort_pl$YEAR[! mort_pl$YEAR %in% YearUniq$year])
+      
+      #get agg years
+      aggYear <- sort(unique(YearUniq$aggYear))
+      
+      #create data.frame to hold data summaries
+      cnames = c("Stand","Plot","CWDYear","treeYear1","treeYear2","Species",
+                 "tph0_spp","tph1_spp","ba0_spp","ba1_spp",
+                 "surv_prop_spp",
+                 "growth_ba_spp",
+                 "dYear","area_ha","minDBH_cm")
+      out = data.frame(matrix(NA,nrow = 1,ncol = length(cnames)))
+      colnames(out) = cnames
+      
+      out$CWDYear = CWD_year
+      out$treeYear1 = min(aggYear[aggYear >= (CWD_year-10)])
+      out$treeYear2 = min(aggYear[aggYear >= (out$treeYear1+20)])
+      out$dYear = out$treeYear2 - out$treeYear1
+      
+      out$Stand = unlist(strsplit(SP_tmp[pl]," "))[1]
+      out$Plot = unlist(strsplit(SP_tmp[pl]," "))[2]
+      out$Species = SpeciesUniq[sp]
+      rm(list = c("cnames"))
+      
+      #calculate area in hectares for stand and year during plot establishment for first post-CWD measurement
+      yearList = YearUniq$year[which(YearUniq$aggYear == out$treeYear1)]###
+      
+      area_ha = meas_pl$PLOT_AREA_M2_CORR[meas_pl$YEAR_RAW == YearUniq$year[YearUniq$year == yearList[length(yearList)]]]/10000
+      minDBH = meas_pl$DBH_MINIMUM [meas_pl$YEAR_RAW == YearUniq$year[YearUniq$year == yearList[length(yearList)]]]
+      
+      
+      if(length(area_ha) == 0) {
+        area_ha <- out$area_ha[1]
+        minDBH <- out$minDBH_cm[1]
+      }
+      out$area_ha     <- area_ha
+      out$minDBH_cm   <- minDBH
+      
+      #Get Tree Initial Measurement - all species
+      treeList_all_0 = tree_pl[tree_pl$YEAR %in% YearUniq$year[YearUniq$aggYear == out$treeYear1],]
+      #subselect to trees of focal species
+      treeList_spp_0 = treeList_all_0[treeList_all_0$SPECIES == SpeciesUniq[sp],]
+      if(nrow(treeList_spp_0) == 0) next
+      
+      out$tph0_spp <- nrow(treeList_spp_0[treeList_spp_0$TREE_STATUS %in% c(1,2),])/area_ha
+      out$ba0_spp  <- sum(pi*(treeList_spp_0$DBH[treeList_spp_0$TREE_STATUS %in% c(1,2)]/2)^2)/10000/area_ha
+      
+      #get tph and ba in time 2
+      treeList_all_1 = tree_pl[tree_pl$YEAR %in% YearUniq$year[YearUniq$aggYear == out$treeYear2],]
+      #subselect to trees of focal species
+      treeList_spp_1 = treeList_all_1[treeList_all_1$SPECIES == SpeciesUniq[sp],]
+      
+      if(nrow(treeList_spp_1) == 0) next
+      
+      out$tph1_spp <- nrow(treeList_spp_1[treeList_spp_1$TREE_STATUS %in% c(1,2),])/area_ha
+      out$ba1_spp  <- sum(pi*(treeList_spp_1$DBH[treeList_spp_1$TREE_STATUS %in% c(1,2)]/2)^2)/10000/area_ha
+      
+      #get growth of trees alive at time 1 and time 2
+      tmp0 <- treeList_spp_0[treeList_spp_0$TREE_STATUS %in% c(1,2),]
+      tmp1 <- treeList_spp_1[treeList_spp_1$TREE_STATUS %in% c(1,2),]
+      
+      keep0 <- which(tmp0$TAG %in% tmp1$TAG)
+      keep1 <- match(tmp0$TAG[keep0],tmp1$TAG)
+      
+      if(length(keep1) > 0)
+        out$growth_ba_spp <- sum(pi*(tmp1$DBH[keep1]/2)^2)/10000/area_ha -
+                             sum(pi*(tmp0$DBH[keep0]/2)^2)/10000/area_ha
+      
+      #get survival of trees alive at time 1
+      out$surv_prop_spp <- length(keep0)/nrow(tmp0)
+      
+      
+       
+      out_pl[[pl]] <- out
+      
+      
+    }
+    
+    out_st_pl[[st]] <- do.call(rbind,out_pl)
+    
+  }
+  
+  out_sp_st_pl[[sp]] <- do.call(rbind,out_st_pl)
+  
+  #clean up workspace
+  
+}
+
+rm(list = c("out", "area_ha"))
+
+OUT <- do.call(rbind,out_sp_st_pl)
+
+##save
+#all species
+write.csv(OUT,
+          file.path(dir_output, "PSP_Plot_Change_20year.csv"),
+          row.names = FALSE)
+
+#only Douglas-fir: I think that this is the one we used!!!
+write.csv(OUT[OUT$Species == "PSME",],
+          file.path(dir_output, "PSP_Plot_Change_20year_PSME_v2.csv"),
+          row.names = FALSE)
+
+#only western hemlock
+write.csv(OUT[OUT$Species == "TSHE",],
+          file.path(dir_output, "PSP_Plot_Change_20year_TSHE.csv"),
+          row.names = FALSE)
+
+
