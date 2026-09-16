@@ -11,6 +11,5 @@ rm(list = ls()); gc()
 # Make needed folder(s)
 dir.create(path = file.path("data", "raw"), showWarnings = FALSE, recursive = TRUE)
 dir.create(path = file.path("data", "standard"), showWarnings = FALSE)
-dir.create(path = file.path("graphs"), showWarnings = FALSE)
 
 # End ----
