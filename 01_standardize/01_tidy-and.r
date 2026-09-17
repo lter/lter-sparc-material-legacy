@@ -242,14 +242,6 @@ for(focal_stand in sort(unique(tree_data$STANDID))){
 and_live <- purrr::list_rbind(list.01_stand.plot) %>% 
   janitor::clean_names()
 
-# # Read in from the static file
-# and_live <- read.csv(file = file.path("data", "from-drive", 
-#     "PSP_Plot_Change_20year_PSME.csv")) %>% 
-#   dplyr::rename(growth_ba_spp = growth_baph_spp,
-#     ba0_spp = baph0_spp,
-#     ba1_spp = baoh1_spp) %>% 
-#   janitor::clean_names()
-
 # Check structure
 dplyr::glimpse(and_live)
 
