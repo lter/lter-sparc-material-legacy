@@ -7,11 +7,11 @@ library(magrittr)
 rm(list = ls()); gc()
 
 # Grab the 'site summaries' file to know desired plots/stands/etc.
-SiteSummaries <- read.csv(file.path("data", "from-drive", "OHJA_downed wood summary_v2.csv")) %>% 
+and_dead <- read.csv(file.path("data", "from-drive", "OHJA_downed wood summary_v2.csv")) %>% 
   dplyr::mutate(stand_plot = paste(stand, plot))
 
 # Check structure
-dplyr::glimpse(SiteSummaries)
+dplyr::glimpse(and_dead)
 
 # Read in the four necessary data files
 mort_v01 <- read.csv(file.path("data", "raw", "00_AND__Individual tree mortality.csv"))
@@ -38,19 +38,19 @@ meas_v02 <- meas_v01 %>%
 # Filter these as needed
 mort_v03 <- mort_v02 %>% 
   dplyr::filter(SPECIES == "PSME") %>% 
-  dplyr::filter(STANDID %in% unique(SiteSummaries$stand)) %>% 
-  dplyr::filter(STAND_PLOT %in% unique(SiteSummaries$stand_plot))
+  dplyr::filter(STANDID %in% unique(and_dead$stand)) %>% 
+  dplyr::filter(STAND_PLOT %in% unique(and_dead$stand_plot))
 tree_v03 <- tree_v02 %>% 
   dplyr::filter(SPECIES == "PSME") %>% 
-  dplyr::filter(STANDID %in% unique(SiteSummaries$stand)) %>% 
-  dplyr::filter(STAND_PLOT %in% unique(SiteSummaries$stand_plot))
+  dplyr::filter(STANDID %in% unique(and_dead$stand)) %>% 
+  dplyr::filter(STAND_PLOT %in% unique(and_dead$stand_plot))
 init_v03 <- init_v02 %>% 
   dplyr::filter(SPECIES == "PSME") %>% 
-  dplyr::filter(STANDID %in% unique(SiteSummaries$stand)) %>% 
-  dplyr::filter(STAND_PLOT %in% unique(SiteSummaries$stand_plot))
+  dplyr::filter(STANDID %in% unique(and_dead$stand)) %>% 
+  dplyr::filter(STAND_PLOT %in% unique(and_dead$stand_plot))
 meas_v03 <- meas_v02 %>% 
-  dplyr::filter(STANDID %in% unique(SiteSummaries$stand)) %>% 
-  dplyr::filter(STAND_PLOT %in% unique(SiteSummaries$stand_plot))
+  dplyr::filter(STANDID %in% unique(and_dead$stand)) %>% 
+  dplyr::filter(STAND_PLOT %in% unique(and_dead$stand_plot))
 
 # Make computation-ready versions of each
 mort_data <- mort_v03
@@ -68,8 +68,8 @@ dplyr::glimpse(meas_data)
 message("Number of trees = ", length(unique(tree_data$TREEID)))
 
 # Get appropriate plots & years
-(PlotIDs <- SiteSummaries$stand_plot)
-(PlotYears <- SiteSummaries$year)
+(PlotIDs <- and_dead$stand_plot)
+(PlotYears <- and_dead$year)
 
 ## -------------------------------------------- ##
 # Calculate Per-Plot Growth/Mortality ----
