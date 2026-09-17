@@ -1,6 +1,8 @@
 # Objective: Calculate tree density and basal area change (growth, mortality, and ingrowth)
 ## for each species and plot
 
+library(magrittr)
+
 # Clear environment & collect garbage
 rm(list = ls()); gc()
 
@@ -48,7 +50,7 @@ init_v03 <- init_v02 %>%
   dplyr::filter(STAND_PLOT %in% unique(SiteSummaries$stand_plot))
 meas_v03 <- meas_v02 %>% 
   dplyr::filter(STANDID %in% unique(SiteSummaries$stand)) %>% 
-  dplyr::filter(STANDID %in% unique(SiteSummaries$stand))
+  dplyr::filter(STAND_PLOT %in% unique(SiteSummaries$stand_plot))
 
 # Make computation-ready versions of each
 mort_data <- mort_v03
@@ -62,196 +64,158 @@ dplyr::glimpse(tree_data)
 dplyr::glimpse(init_data)
 dplyr::glimpse(meas_data)
 
-# #Print total number of stands and trees
+# Print total number of stands and trees
 message("Number of trees = ", length(unique(tree_data$TREEID)))
 
-# Get appropriate plots
-(PlotIDs <- unique(SiteSummaries$stand_plot))
-(PlotYears <- unique(SiteSummaries$year))
-
-# Print total number of trees heading into calculation phase
-message("Number of trees after censoring = ", length(unique(tree_data$TREEID)))
+# Get appropriate plots & years
+(PlotIDs <- SiteSummaries$stand_plot)
+(PlotYears <- SiteSummaries$year)
 
 ## -------------------------------------------- ##
 # Calculate Per-Plot Growth/Mortality ----
 ## -------------------------------------------- ##
 # Goal: for each plot, get the growth and mortality over a ~20 year window following dead wood
 
-# create vector of stands with at least 100 trees of the focal species 
-(StandUniq <- sort(unique(tree_data$STANDID)))
-(StandPlotUniq <- sort(unique(tree_data$STAND_PLOT)))
+# Create list for storing outputs
+list.01_stand.plot <- list()
 
-#create list to hold output
-out_st_pl <- list()
+# Iterate across stands in tree data
+for(focal_stand in sort(unique(tree_data$STANDID))){
+  # focal_stand <- "RS24"
 
-for(st in seq_along(StandUniq)){
-  # st <- 1
-  
-  #subselect data to focal stand within the focal species
-  mort_std = mort_data[mort_data$STANDID == StandUniq[st],]
-  tree_std = tree_data[tree_data$STANDID == StandUniq[st],]
-  init_std = init_data[init_data$STANDID == StandUniq[st],]
-  meas_std = meas_data[meas_data$StandID == StandUniq[st],]
-  
-  (SP_tmp <- unique(paste(tree_std$STANDID,tree_std$PLOTNUMBER)))
-  
-  out_pl <- list()
-  
-  for(pl in seq_along(SP_tmp)){
-    # pl <- 1
-    
-    CWD_year <- PlotYears[PlotIDs == SP_tmp[pl]]
-    
-    mort_pl <- mort_std[mort_std$PLOTNUMBER == unlist(strsplit(SP_tmp[pl]," "))[2],]
-    tree_pl <- tree_std[tree_std$PLOTNUMBER == unlist(strsplit(SP_tmp[pl]," "))[2],]
-    init_pl <- init_std[init_std$PLOTNUMBER == unlist(strsplit(SP_tmp[pl]," "))[2],]
-    meas_pl <- meas_std[meas_std$Plot == unlist(strsplit(SP_tmp[pl]," "))[2],]
-    
-    # Create df with measurement years & type of measurement
-    YearUniq <- data.frame("year" = meas_pl$YEAR_RAW,
-        "establishment" = FALSE, 
-        "remeasurement" = FALSE,
-        "mortality" = FALSE,
-        "aggYear" = meas_pl$YEAR_AGG) %>% 
+  # Progress message
+  message("Working on stand '", focal_stand, "'")
+
+  # Subset the four key datasets to just this stand
+  mort_stand <- dplyr::filter(mort_data, STANDID == focal_stand)
+  tree_stand <- dplyr::filter(tree_data, STANDID == focal_stand)
+  init_stand <- dplyr::filter(init_data, STANDID == focal_stand)
+  meas_stand <- dplyr::filter(meas_data, STANDID == focal_stand)
+
+  # Identify plots within this stand
+  relevant_standplots <- unique(tree_stand$STAND_PLOT)
+
+  # Make a list for storing stand/plot combination outputs
+  list.02_plot <- list()
+
+  # Iterate across stand/plot combinations
+  for(focal_plot in relevant_standplots){
+    # focal_plot <- "RS24 2"
+
+    # Progress message
+    message("Working on plot '", focal_plot, "'")
+
+    # Subset the four key datasets to just this stand/plot combo
+    mort_plot <- dplyr::filter(mort_stand, STAND_PLOT == focal_plot)
+    tree_plot <- dplyr::filter(tree_stand, STAND_PLOT == focal_plot)
+    init_plot <- dplyr::filter(init_stand, STAND_PLOT == focal_plot)
+    meas_plot <- dplyr::filter(meas_stand, STAND_PLOT == focal_plot)
+
+    # Generate a plot with years and types of measurement
+    year_df <- meas_plot %>% 
+      dplyr::mutate(establishment = ACTIVITY %in% c("A","E"),
+        remeasurement = ACTIVITY == "R",
+        mortality = ACTIVITY %in% c("R", "M"),
+        .after = YEAR_RAW) %>% 
+      dplyr::select(year = YEAR_RAW, aggYear = YEAR_AGG,
+        establishment, remeasurement, mortality) %>% 
       dplyr::distinct() %>% 
       dplyr::arrange(year)
-    
-    # Re-set establishment if any plots in stand established or plot addition that year
-    YearUniq$establishment[YearUniq$year %in% meas_pl$YEAR_RAW[meas_pl$ACTIVITY %in% c("A","E")]] = TRUE
-    #sets remeasuremement to TRUE if any plots in stand remeasured that year
-    YearUniq$remeasurement[YearUniq$year %in% meas_pl$YEAR_RAW[meas_pl$ACTIVITY == "R"]] = TRUE
-    #sets mortality to TRUE if any plots in stand remeasured or checked for mortality that year
-    YearUniq$mortality[YearUniq$year %in% meas_pl$YEAR_RAW[meas_pl$ACTIVITY == "R"]] = TRUE
-    YearUniq$mortality[YearUniq$year %in% meas_pl$YEAR_RAW[meas_pl$ACTIVITY == "M"]] = TRUE
-    
+
+    # Check structure
+    ## dplyr::glimpse(year_df)
+
     # Identify years without measurements
-    treeYearMissing <- dplyr::filter(tree_pl, !YEAR %in% YearUniq$year) %>% 
-      dplyr::pull(YEAR)
+    treeYearMissing <- dplyr::filter(tree_plot, !YEAR %in% year_df$year)$YEAR
           
+    # If any, add rows to the year output
     if(length(treeYearMissing) > 0) 
-      YearUniq <- dplyr::bind_rows(YearUniq,
-        data.frame("year" = treeYearMissing,
-          "establishment" = FALSE,
-          "remeasurement" = TRUE,
-          "mortality" = TRUE,
-          "aggYear" = treeYearMissing))
+      year_df %<>% dplyr::bind_rows(year_df ,data.frame("year" = treeYearMissing,
+            "establishment" = FALSE,
+            "remeasurement" = TRUE,
+            "mortality" = TRUE,
+            "aggYear" = treeYearMissing))
+
+    # Get vectors of some key metrics
+    cwd.year_vec <- PlotYears[PlotIDs == focal_plot]
+    agg.year_vec <- sort(unique(year_df$aggYear))
     
-    # Identify years missing mortality info
-    mortYearMissing <- mort_pl %>% 
-      dplyr::filter(!YEAR %in% YearUniq$year) %>% 
-      dplyr::pull(YEAR) %>%
-      unique()
-    
-    # Get agg years
-    aggYear <- sort(unique(YearUniq$aggYear))
-    
-    # Make a dataframe for summaries
-    out_df <- data.frame(
+    # Assemble the beginnings of an output dataframe
+    out_v01 <- data.frame(
       "Species" = "PSME",
-      "Stand" = unlist(strsplit(SP_tmp[pl]," "))[1],
-      "Plot" = unlist(strsplit(SP_tmp[pl]," "))[2],
-      "CWDYear" = CWD_year, 
-      "treeYear1" = min(aggYear[aggYear >= (CWD_year - 10)]),
-      "area_ha" = (meas_pl$PLOT_AREA_M2_CORR / 10^4), 
-      "minDBH_cm" = meas_pl$DBH_MINIMUM)
+      "Stand" = focal_stand,
+      "Plot" = unique(tree_plot$PLOTNUMBER),
+      "CWDYear" = cwd.year_vec, 
+      "treeYear1" = min(agg.year_vec[agg.year_vec >= (cwd.year_vec - 10)]),
+      "area_ha" = (meas_plot$PLOT_AREA_M2_CORR / 10^4), 
+      "minDBH_cm" = meas_plot$DBH_MINIMUM)
 
-    # Get the years that match tree year 1
-    yearList <- YearUniq$year[which(YearUniq$aggYear == out_df$treeYear1)]
+    # Check structure
+    ## dplyr::glimpse(out_v01)
     
-    # Do extra calculations for output df
-    out_df <- out_df %>% 
+    # Identify the years that match tree year 1
+    start.year_vec <- year_df$year[which(year_df$aggYear == out_v01$treeYear1)]
+
+    # Compute more metrics with that
+    out_v02 <- out_v01 %>% 
       dplyr::mutate(
-        treeYear2 = min(aggYear[aggYear >= (unique(treeYear1 + 20))]),
+        treeYear2 = min(agg.year_vec[agg.year_vec >= (unique(treeYear1 + 20))]),
         dYear = treeYear2 - treeYear1,
-        .after = treeYear1 )
-    
-    # Check structure
-    # dplyr::glimpse(out_df)
-      
-    # Get initial tree measurement
-    treeList_all_0 <- dplyr::filter(tree_pl, YEAR == unique(out_df$treeYear1))
-    
-    # If there are no measurements for that time step, skip subsequent computation
-    if(nrow(treeList_all_0) == 0) next
-    
-    # Otherwise, grab the DBH of all trees with status 1 or 2
-    tree_stat_0 <- treeList_all_0$DBH[treeList_all_0$TREE_STATUS %in% c(1,2)]
+        .after = treeYear1)
 
-    # Use that to calculate some key metrics
-    out_df <- out_df %>% 
+    # Check structure
+    ## dplyr::glimpse(out_v02)
+
+    # Get the '0th' and time + 1 tree data
+    tree_0 <- dplyr::filter(tree_plot, YEAR == unique(out_v02$treeYear1))
+    tree_1 <- dplyr::filter(tree_plot, YEAR == unique(out_v02$treeYear2))
+
+    # If there are no measurements for either, move on from this stand/plot combination entirely
+    if(nrow(tree_0) == 0 | nrow(tree_1) == 0) next
+
+    # Otherwise, grab all trees with status 1 or 2
+    tree.stat_0 <- tree_0[tree_0$TREE_STATUS %in% c(1,2)]
+    tree.stat_1 <- tree_1[tree_1$TREE_STATUS %in% c(1,2)]
+
+    # Figure out which tags were present at time 0 or 1
+    keep0 <- which(tree.stat_0$TAG %in% tree.stat_1$TAG)
+    keep1 <- match(tree.stat_0$TAG[keep0], tree.stat_1$TAG)
+
+    # And use the above to do some final calculations
+    out_v03 <- out_v02 %>% 
       dplyr::mutate(
-        tph0_spp = length(tree_stat_0) / area_ha,
-        ba0_spp = ((sum(pi * (tree_stat_0 / 2)) / 10^4) / area_ha),
-        .after = dYear)
-    
-    # And ditch that tree stat object
-    rm(list = "tree_stat_0")
-    
-    # Check structure
-    # dplyr::glimpse(out_df)
-
-    # Get tree meaasurement at time 2
-    treeList_all_1 <- dplyr::filter(tree_pl, YEAR == unique(out_df$treeYear2))
-    
-    # If there are no measurements for that time step, skip subsequent computation
-    if(nrow(treeList_all_1) == 0) next
-
-    # Otherwise, grab the DBH of all trees with status 1 or 2
-    tree_stat_1 <- treeList_all_1$DBH[treeList_all_1$TREE_STATUS %in% c(1,2)]
-
-    # Use that to calculate some key metrics
-    out_df <- out_df %>% 
-      dplyr::mutate(
-        tph1_spp = length(tree_stat_1) / area_ha,
-        ba1_spp = ((sum(pi * (tree_stat_1 / 2)) / 10^4) / area_ha),
-        .after = ba0_spp)
-    
-    # And ditch that tree stat object
-    rm(list = "tree_stat_1")
+        tph0_spp = length(tree.stat_0$DBH) / area_ha,
+        tph1_spp = length(tree.stat_1$DBH) / area_ha,
+        ba0_spp = ((sum(pi * (tree.stat_0$DBH / 2)) / 10^4) / area_ha),
+        ba1_spp = ((sum(pi * (tree.stat_1$DBH / 2)) / 10^4) / area_ha),
+        keep0_ba = ifelse(length(keep1) == 0, yes = NA,
+          no = ((sum(pi * (tree.stat_0$DBH[keep0] / 2)^2) / 10^4) / area_ha)),
+        keep1_ba = ifelse(length(keep1) == 0, yes = NA,
+          no = ((sum(pi * (tree.stat_1$DBH[keep1] / 2)^2) / 10^4) / area_ha)),
+        growth_ba_spp = (keep1_ba - keep0_ba),
+        surv_prop_spp = length(keep0) / nrow(tree.stat_0),
+        .after = dYear) %>% 
+      dplyr::select(-keep0_ba, -keep1_ba)
     
     # Check structure
-    # dplyr::glimpse(out_df)
+    ## dplyr::glimpse(out_v03)
+
+    # Add that output to the plot list
+    list.02_plot[[focal_plot]] <- out_v03
     
-    #get growth of trees alive at time 1 and time 2
-    tmp0 <- treeList_all_0[treeList_all_0$TREE_STATUS %in% c(1,2),]
-    tmp1 <- treeList_all_1[treeList_all_1$TREE_STATUS %in% c(1,2),]
-    
-    keep0 <- which(tmp0$TAG %in% tmp1$TAG)
-    keep1 <- match(tmp0$TAG[keep0], tmp1$TAG)
-    
-    # If any trees survived to the next time step, compute growth
-    if(length(keep1) > 0){
-      out_df <- out_df %>% 
-        dplyr::mutate(
-          keep0_ba = ((sum(pi * (tmp0$DBH[keep0] / 2)^2) / 10^4) / area_ha),
-          keep1_ba = ((sum(pi*(tmp1$DBH[keep1] / 2)^2) / 10^4) / area_ha),
-          growth_ba_spp = (keep1_ba - keep0_ba),
-          .after = ba1_spp)
-    }
+  } # Close plot loop
 
-    # Calculate surival proportions
-    out_df <- out_df %>% 
-      dplyr::mutate(
-        surv_prop_spp = length(keep0) / nrow(tmp0),
-        .after = growth_ba_spp)
+  # Unlist plots within the stand and add that output to the stand/plot list
+  list.01_stand.plot[[focal_stand]] <- purrr::list_rbind(list.02_plot) 
 
-    # Check structure
-    # dplyr::glimpse(out_df)
+} # Close stand loop
 
-    # Add to plot list & end loop
-    out_pl[[pl]] <- out_df }
-  
-  # Unlist plots, add to stand list, and end loop
-  out_st_pl[[st]] <- purrr::list_rbind(out_pl) }
-
-# Make a final output
-final_df <- purrr::list_rbind(out_st_pl)
+# Unlist _that_ to generate the final 'all stands, all plots' output
+and_live <- purrr::list_rbind(list.01_stand.plot)
 
 # Check structure
-str(final_df)
+dplyr::glimpse(and_live)
 
-##save
-write.csv(final_df, file.path("data", "AND_test-out.csv"), 
-  row.names = FALSE)
-
-
+# Export locally (uncomment if desired)
+# write.csv(and_live, row.names = FALSE, na = '', 
+#   file.path("data", "01_AND-live-tree-data.csv"))
