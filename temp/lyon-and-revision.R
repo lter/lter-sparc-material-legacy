@@ -1,84 +1,85 @@
 # Objective: Calculate tree density and basal area change (growth, mortality, and ingrowth)
-## for each species and plot. Only TV010
+## for each species and plot
 
-#clear workspace
-
+# Clear environment & collect garbage
 rm(list = ls()); gc()
 
-# TV010 data locations
-## file.path() combines text strings into a file path (useful modification of paste)
+# Grab the 'site summaries' file to know desired plots/stands/etc.
+SiteSummaries <- read.csv(file.path("data", "from-drive", "OHJA_downed wood summary_v2.csv")) %>% 
+  dplyr::mutate(stand_plot = paste(stand, plot))
 
-#On EDI: https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-and.2742.28
-#Note that the version number might be slightly different
-mort_data = read.csv(file.path("data", "raw", "00_AND__Individual tree mortality.csv")) %>% 
-  dplyr::filter(SPECIES == "PSME")
+# Check structure
+dplyr::glimpse(SiteSummaries)
+
+# Read in the four necessary data files
+mort_v01 <- read.csv(file.path("data", "raw", "00_AND__Individual tree mortality.csv"))
+tree_v01 <- read.csv(file.path("data", "raw", "00_AND__Individual tree remeasurement.csv")) 
+init_v01 <- read.csv(file.path("data", "raw", "00_AND__Initial tree conditions with spatial coordinates.csv"))
+meas_v01 <- read.csv(file.path("data", "from-drive", "TP00112_v13.csv"))
+
+## -------------------------------------------- ##
+# Filter Tree Data to Desired Rows ----
+## -------------------------------------------- ##
+
+# Make necessary additional columns
+mort_v02 <- mort_v01 %>% 
+  dplyr::mutate(STAND_PLOT = paste(STANDID, PLOTNUMBER))
+tree_v02 <- tree_v01 %>% 
+  dplyr::mutate(STAND_PLOT = paste(STANDID, PLOTNUMBER))
+init_v02 <- init_v01 %>% 
+  dplyr::mutate(STAND_PLOT = paste(STANDID, PLOTNUMBER))
+meas_v02 <- meas_v01 %>% 
+  dplyr::mutate(STANDID = substr(PLOTID, start = 1, stop = 4),
+    PLOTNUMBER = as.integer(substr(PLOTID, start = 5, stop = 8)),
+    STAND_PLOT = paste(STANDID, PLOTNUMBER))
+
+# Filter these as needed
+mort_v03 <- mort_v02 %>% 
+  dplyr::filter(SPECIES == "PSME") %>% 
+  dplyr::filter(STANDID %in% unique(SiteSummaries$stand)) %>% 
+  dplyr::filter(STAND_PLOT %in% unique(SiteSummaries$stand_plot))
+tree_v03 <- tree_v02 %>% 
+  dplyr::filter(SPECIES == "PSME") %>% 
+  dplyr::filter(STANDID %in% unique(SiteSummaries$stand)) %>% 
+  dplyr::filter(STAND_PLOT %in% unique(SiteSummaries$stand_plot))
+init_v03 <- init_v02 %>% 
+  dplyr::filter(SPECIES == "PSME") %>% 
+  dplyr::filter(STANDID %in% unique(SiteSummaries$stand)) %>% 
+  dplyr::filter(STAND_PLOT %in% unique(SiteSummaries$stand_plot))
+meas_v03 <- meas_v02 %>% 
+  dplyr::filter(STANDID %in% unique(SiteSummaries$stand)) %>% 
+  dplyr::filter(STANDID %in% unique(SiteSummaries$stand))
+
+# Make computation-ready versions of each
+mort_data <- mort_v03
+tree_data <- tree_v03
+init_data <- init_v03
+meas_data <- meas_v03
+
+# Check structure
 dplyr::glimpse(mort_data)
-
-tree_data = read.csv(file.path("data", "raw", "00_AND__Individual tree remeasurement.csv")) %>% 
-    dplyr::filter(SPECIES == "PSME")
 dplyr::glimpse(tree_data)
-
-init_data = read.csv(file.path("data", "raw", "00_AND__Initial tree conditions with spatial coordinates.csv")) %>% 
-  dplyr::filter(SPECIES == "PSME")
 dplyr::glimpse(init_data)
-
-#On HJA website: https://andrewsforest.oregonstate.edu/data/datacatalog/TP001
-#Note that the version number might be slightly different
-meas_data = read.csv(file.path("data", "from-drive", "TP00112_v13.csv"))
 dplyr::glimpse(meas_data)
 
-#based on Kai's code and https://portal.edirepository.org/nis/mapbrowse?packageid=knb-lter-and.4032.10
-SiteSummaries <- read.csv(file.path("data", "from-drive", "OHJA_downed wood summary_v2.csv"))
-str(SiteSummaries)
-
-#Break up plot ID into stand and plot for meas_data
-meas_data <- meas_data %>% 
-  dplyr::mutate(StandID = substr(meas_data$PLOTID,1,4),
-    Plot = as.integer(substr(meas_data$PLOTID,5,8)))
-str(meas_data)
-
 # #Print total number of stands and trees
-message(paste0("Number of trees = ", length(unique(tree_data$TREEID))))
-
-# # Set appropriate stand IDs to use based on down wood
-StandIDs <- sort(unique(SiteSummaries$stand))
-
-if(!is.null(StandIDs)){
-  mort_data = mort_data[mort_data$STANDID %in% StandIDs,]
-  tree_data = tree_data[tree_data$STANDID %in% StandIDs,]
-  init_data = init_data[init_data$STANDID %in% StandIDs,]
-  meas_data = meas_data[meas_data$StandID %in% tree_data$STANDID,]
-}
-
-#Print total number of trees after censoring
-message(paste0("Number of trees after censoring = ", length(unique(tree_data$TREEID))))
+message("Number of trees = ", length(unique(tree_data$TREEID)))
 
 # Get appropriate plots
-PlotIDs <- paste(SiteSummaries$stand, SiteSummaries$plot)
-PlotYears <- SiteSummaries$year
+(PlotIDs <- unique(SiteSummaries$stand_plot))
+(PlotYears <- unique(SiteSummaries$year))
 
-if(!is.null(PlotIDs)){
-  mort_data = mort_data[paste(mort_data$STANDID,mort_data$PLOTNUMBER) %in% PlotIDs,]
-  tree_data = tree_data[paste(tree_data$STANDID,tree_data$PLOTNUMBER) %in% PlotIDs,]
-  init_data = init_data[paste(init_data$STANDID,init_data$PLOTNUMBER) %in% PlotIDs,]
-  meas_data = meas_data[paste(meas_data$StandID,meas_data$Plot) %in% PlotIDs,]
-}
-
-
-#ensure that species in init_data euqls species in tree_data
-unique(tree_data$SPECIES)
-init_data$SPECIES <- ifelse(init_data$TREEID %in% tree_data$TREEID,
-  yes = "PSME", no = init_data$SPECIES)
-
-#Print total number of trees after censoring
+# Print total number of trees heading into calculation phase
 message("Number of trees after censoring = ", length(unique(tree_data$TREEID)))
 
-#Generate for each plot the growth and mortality over a ~20 year window following dead wood
-
+## -------------------------------------------- ##
+# Calculate Per-Plot Growth/Mortality ----
+## -------------------------------------------- ##
+# Goal: for each plot, get the growth and mortality over a ~20 year window following dead wood
 
 # create vector of stands with at least 100 trees of the focal species 
 (StandUniq <- sort(unique(tree_data$STANDID)))
-(StandPlotUniq <- sort(unique(paste(tree_data$STANDID,tree_data$PLOTNUMBER))))
+(StandPlotUniq <- sort(unique(tree_data$STAND_PLOT)))
 
 #create list to hold output
 out_st_pl <- list()
