@@ -40,7 +40,6 @@ message(paste0("Number of trees = ", length(unique(tree_data$TREEID))))
 # Set appropriate stand IDs to use based on down wood
 StandIDs <- unique(SiteSummaries$stand)
 
-
 if(!is.null(StandIDs)){
   mort_data = mort_data[mort_data$STANDID %in% StandIDs,]
   tree_data = tree_data[tree_data$STANDID %in% StandIDs,]
@@ -51,16 +50,16 @@ if(!is.null(StandIDs)){
 #Print total number of trees after censoring
 message(paste0("Number of trees after censoring = ", length(unique(tree_data$TREEID))))
 
+# Get appropriate plots
+PlotIDs <- paste(SiteSummaries$stand,SiteSummaries$plot)
+PlotYears <- SiteSummaries$year
+
 if(!is.null(PlotIDs)){
   mort_data = mort_data[paste(mort_data$STANDID,mort_data$PLOTNUMBER) %in% PlotIDs,]
   tree_data = tree_data[paste(tree_data$STANDID,tree_data$PLOTNUMBER) %in% PlotIDs,]
   init_data = init_data[paste(init_data$STANDID,init_data$PLOTNUMBER) %in% PlotIDs,]
   meas_data = meas_data[paste(meas_data$StandID,meas_data$Plot) %in% PlotIDs,]
 }
-
-# Get appropriate plots
-PlotIDs <- paste(SiteSummaries$stand,SiteSummaries$plot)
-PlotYears <- SiteSummaries$year
 
 #ensure that species in init_data euqls species in tree_data
 unique(tree_data$SPECIES)
@@ -71,8 +70,6 @@ init_data$SPECIES <- ifelse(init_data$TREEID %in% tree_data$TREEID,
 message("Number of trees after censoring = ", length(unique(tree_data$TREEID)))
 
 #Generate for each plot the growth and mortality over a ~20 year window following dead wood
-
-
 (SpeciesUniq <- sort(unique(init_data$SPECIES)))
 
 out_sp_st_pl <- list()
@@ -121,7 +118,7 @@ for(sp in seq_along(SpeciesUniq)){
       # create data.frame with years of measurement (year) and whether that measurement is a full measurement (Type) 
       YearUniq <- data.frame(year = sort(unique(meas_pl$YEAR_RAW)),
                             establishment = FALSE, 
-                            remeasurememnt = FALSE,
+                            remeasurement = FALSE,
                             mortality = FALSE,
                             aggYear = NA)
       #sets establishment to TRUE if any plots in stand established or plot addition that year
@@ -143,7 +140,7 @@ for(sp in seq_along(SpeciesUniq)){
       if(length(treeYearMissing) > 0) 
         YearUniq <- rbind(YearUniq,cbind(year = treeYearMissing,
                                          establishment = FALSE,
-                                         remeasurememnt = TRUE,
+                                         remeasurement = TRUE,
                                          mortality = TRUE,
                                          aggYear = treeYearMissing))
       
@@ -217,17 +214,10 @@ for(sp in seq_along(SpeciesUniq)){
       
       #get survival of trees alive at time 1
       out$surv_prop_spp <- length(keep0)/nrow(tmp0)
-      
-      
        
-      out_pl[[pl]] <- out
-      
-      
-    }
+      out_pl[[pl]] <- out }
     
-    out_st_pl[[st]] <- purrr::list_rbind(out_pl)
-    
-  }
+    out_st_pl[[st]] <- purrr::list_rbind(out_pl) }
   
   out_sp_st_pl[[sp]] <- purrr::list_rbind(out_st_pl)
   
