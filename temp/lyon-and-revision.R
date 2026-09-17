@@ -174,8 +174,8 @@ for(focal_stand in sort(unique(tree_data$STANDID))){
     if(nrow(tree_0) == 0 | nrow(tree_1) == 0) next
 
     # Otherwise, grab all trees with status 1 or 2
-    tree.stat_0 <- tree_0[tree_0$TREE_STATUS %in% c(1,2)]
-    tree.stat_1 <- tree_1[tree_1$TREE_STATUS %in% c(1,2)]
+    tree.stat_0 <- tree_0[tree_0$TREE_STATUS %in% c(1,2), ]
+    tree.stat_1 <- tree_1[tree_1$TREE_STATUS %in% c(1,2), ]
 
     # Figure out which tags were present at time 0 or 1
     keep0 <- which(tree.stat_0$TAG %in% tree.stat_1$TAG)
