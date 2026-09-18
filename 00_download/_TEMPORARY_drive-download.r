@@ -24,7 +24,8 @@ rm(list = ls()); gc()
 url <- googledrive::as_id("https://drive.google.com/drive/folders/1eAivlIGIzfXTjrE4_ki4Cgp5Ij-wqIbW")
 
 # Get the contents of that folder
-(conts <- googledrive::drive_ls(path = url))
+(conts <- googledrive::drive_ls(path = url) %>% 
+  dplyr::filter(name == "TP00112_v13.csv"))
 
 # Download 'em (overwriting local copies if needed)
 purrr::walk2(.x = conts$id, .y = conts$name,
