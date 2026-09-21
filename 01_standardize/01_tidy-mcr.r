@@ -3,6 +3,7 @@
 ## -------------------------------------------- ##
 # Purpose
 ## Get these data into a standard format with that of other sites
+## Data downloaded from EDI by `00_download-mcr.r`
 
 ## !!! DATA SOURCE NOTE !!!
 # Data taken from Google Drive (_not_ EDI)
@@ -24,7 +25,8 @@ rm(list = ls()); gc()
 ## -------------------------------------------- ##
 
 # Load in the relevant file
-mcr_v01 <- read.csv(file.path("data", "from-drive", "Regions_master.csv"))
+mcr_v01 <- read.csv(file.path("data", "from-drive", "Regions master.csv"))
+mcr_v01 <- read.csv(file.path("data", "raw", "00_MCR__Regions master.csv"))
 
 # Check structure
 dplyr::glimpse(mcr_v01)
