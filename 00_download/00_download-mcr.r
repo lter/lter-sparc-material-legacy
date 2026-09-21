@@ -39,10 +39,8 @@ options(HTTPUserAgent = "EDI_CodeGen")
 ## -------------------------------------------- ##
 
 # Iterate across package IDs
-for(pkg_id in c("TBD")){
-
-  stop("This dataset isn't (yet) on EDI")
-  # pkg_id <- "TBD"
+for(pkg_id in c("knb-lter-mcr.5063.1")){
+  # pkg_id <- "knb-lter-mcr.5063.1"
 
   # Check out data
   (ents <- EDIutils::read_data_entity_names(packageId = pkg_id))
