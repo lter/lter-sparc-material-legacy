@@ -7,6 +7,7 @@
 ## !!! DATA SOURCE NOTE !!!
 # One (of 5) input files from Google Drive (_not_ EDI)
 ## That file is downloaded from Google Drive by `_TEMPORARY_drive-download.r`
+# Remaining input files are downloaded from EDI by `00_download-and.r`
 ## !!! SEE ABOVE !!!
 
 # Load libraries
