@@ -5,11 +5,6 @@
 ## Get these data into a standard format with that of other sites
 ## Data downloaded from EDI by `00_download-mcr.r`
 
-## !!! DATA SOURCE NOTE !!!
-# Data taken from Google Drive (_not_ EDI)
-## Data downloaded from Google Drive by `_TEMPORARY_drive-download.r`
-## !!! SEE ABOVE !!!
-
 # Load libraries
 # install.packages("librarian")
 librarian::shelf(tidyverse, janitor)
@@ -25,7 +20,6 @@ rm(list = ls()); gc()
 ## -------------------------------------------- ##
 
 # Load in the relevant file
-mcr_v01 <- read.csv(file.path("data", "from-drive", "Regions master.csv"))
 mcr_v01 <- read.csv(file.path("data", "raw", "00_MCR__Regions master.csv"))
 
 # Check structure
@@ -42,12 +36,9 @@ dplyr::glimpse(mcr_v02)
 mcr_v03 <- mcr_v02 %>% 
   # Identify study year
   dplyr::mutate(
-    year = paste0("20", substr(x = TagLab.Date,
-      start = nchar(TagLab.Date) - 1,
-      stop = nchar(TagLab.Date))),
+    year = substr(x = TagLab.Date, start = 1, stop = 4),
     coral_status = ifelse(TagLab.Class.name == "Dead coral",
-      yes = "dead", no = "live")
-    )
+      yes = "dead", no = "live"))
     
 # Check structure
 dplyr::glimpse(mcr_v03)
