@@ -37,8 +37,9 @@ dplyr::glimpse(edi_data)
 ## -------------------------------------------- ##
 # The following code will prompt you to define your EDI Access Key
 ## !!! Make one _before_ attempting to run this code !!!
-## See the README of this folder for details: 
-### https://github.com/lter/lter-sparc-material-legacy_data/tree/main/00_download-data#edi-authentication
+### For instructions on getting an EDI Access Key,
+### Watch this YouTube video: https://youtu.be/fieZSmHk2H4?si=Wo9a5GsAOYp3dnWS
+### Or check out EDI's Identity & Access Manager: (ttps://auth.edirepository.org
 
 # Define your EDI key
 (edi_key <- readline(prompt = "Copy/paste your EDI Access Key here: "))
@@ -120,6 +121,10 @@ for(pkg_id in edi_data$id){
 ## -------------------------------------------- ##
 # Download AND Data From Google Drive ----
 ## -------------------------------------------- ##
+# The following code will attempt to download data not available on EDI from this group's Shared Google Drive
+## !!! Authenticate _before_ attempting to run this code !!!
+### For instructions on `googledrive` authentication,
+### Check out this tutorial: https://lter.github.io/scicomp/tutorial_googledrive-pkg.html
 
 # Identify relevant Drive folder link
 drive_url <- googledrive::as_id("https://drive.google.com/drive/folders/1eAivlIGIzfXTjrE4_ki4Cgp5Ij-wqIbW")
