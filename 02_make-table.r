@@ -5,12 +5,6 @@
 ## Calculate Z scores and make a cross-site table
 ## Works for all sites (but depends on outputs of respective `01` scripts)
 
-# Need to quickly re-generate all standardized data files?
-# purrr::walk(.x = dir("01_standardize", pattern = "*.r"), 
-#   .f = ~ source(file.path("01_standardize", .x)))
-### Note you'll need to have all the raw inputs locally downloaded already
-### If you want the above to work
-
 # Load libraries
 # install.packages("librarian")
 librarian::shelf(tidyverse)
