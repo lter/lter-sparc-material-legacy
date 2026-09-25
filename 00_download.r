@@ -95,7 +95,7 @@ for(pkg_id in edi_data$id){
 
     # Skip the download step (and all assoc. computation) if _either_:
     ## (A) it's present locally and overwriting isn't desired
-    if(overwrite != TRUE){
+    if(overwrite != TRUE & focal_ent$local_name %in% local_raw){
       message("Skipping download because file is already downloaded")
       next } 
     ## (B) it's not a tabular data file
