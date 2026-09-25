@@ -317,7 +317,9 @@ tab_v01 <- z_list %>%
   purrr::imap(.f = ~ dplyr::mutate(.data = .x, site = .y,
     .before = dplyr::everything())) %>% 
   purrr::list_rbind() %>% 
-  dplyr::relocate(year, .before = plot)
+  dplyr::relocate(year, .before = plot) %>% 
+  dplyr::rename_with(.fn = ~ paste0(., "_z.score"),
+    .cols = -site:-plot)
   
 # Check structure
 dplyr::glimpse(tab_v01)
@@ -338,8 +340,8 @@ for(site in unique(names(z_list))){
       dplyr::group_by(dplyr::across(dplyr::all_of(setdiff(x = names(focal_df), 
         y = c("year", "material.legacy.predictor", "foundation.sp.response"))))) %>% 
       dplyr::summarize(
-        material.legacy.predictor = mean(material.legacy.predictor, na.rm = TRUE),
-        foundation.sp.response = mean(foundation.sp.response, na.rm = TRUE),
+        material.legacy.predictor_z.score = mean(material.legacy.predictor, na.rm = TRUE),
+        foundation.sp.response_z.score = mean(foundation.sp.response, na.rm = TRUE),
         .groups = "drop")
 
   # If material legacy _is not_ numeric, grab a unique value across years
@@ -348,8 +350,9 @@ for(site in unique(names(z_list))){
       dplyr::group_by(dplyr::across(dplyr::all_of(setdiff(x = names(focal_df), 
         y = c("year", "foundation.sp.response"))))) %>% 
       dplyr::summarize(
-        foundation.sp.response = mean(foundation.sp.response, na.rm = TRUE),
-        .groups = "drop")
+        foundation.sp.response_z.score = mean(foundation.sp.response, na.rm = TRUE),
+        .groups = "drop") %>% 
+      dplyr::rename(material.legacy.predictor_z.score = material.legacy.predictor)
   }
 
   # Add output to list
@@ -360,7 +363,7 @@ tab_v02 <- mean_z_list %>%
     dplyr::across(.cols = dplyr::everything(), .fns = as.character))) %>% 
   purrr::imap(.f = ~ dplyr::mutate(.data = .x, site = .y,
     .before = dplyr::everything())) %>% 
-  purrr::list_rbind() 
+  purrr::list_rbind()
 
 # Check structure
 dplyr::glimpse(tab_v02)
