@@ -6,7 +6,8 @@ Principal Investigators: _Dr. Kai L. Kopecky, Dr. Katharine N. Suding, Dr. Ty A.
 
 1. `00_download.r` -- Downloads raw data from the [Environmental Data Initiative](https://edirepository.org/) (EDI)
     - To make this work, you'll need to get an Access Key from EDI.For instructions, see either [this video](https://youtu.be/fieZSmHk2H4?si=Wo9a5GsAOYp3dnWS) or [this website](https://auth.edirepository.org)
-2. `01_standardize/` -- Does site-specific wrangling to generate analysis-ready data
+2. `01_standardize.r` -- Does site-specific wrangling to generate analysis-ready data
+    - Actual wrangling code for each site is in the eponymous scripts in the `01_standardize/` _folder_
 3. `02_make-table.r` -- Makes cross-site table for data paper
 
 ### EDI Access Key Housekeeping
