@@ -3,13 +3,15 @@
 ## -------------------------------------------- ##
 # Purpose
 ## Download data from the Environmental Data Initiative (EDI)
+## Also downloads data from Google Drive as/if needed
 
 # Load libraries
 # install.packages("librarian")
-librarian::shelf(EDIutils, tidyverse, tools)
+librarian::shelf(EDIutils, tidyverse, tools, googledrive)
 
 # Get set up
 source(file.path("-setup.r"))
+dir.create(path = file.path("data", "from-drive"), showWarnings = FALSE, recursive = TRUE)
 
 # Clear environment/collect garbage
 rm(list = ls()); gc()
@@ -48,7 +50,7 @@ EDIutils::login(key = edi_key)
 options(HTTPUserAgent = "EDI_CodeGen")
 
 ## -------------------------------------------- ##
-# Download Data ----
+# Download Data From EDI ----
 ## -------------------------------------------- ##
 
 # If data are already downloaded, should they be downloaded again?
@@ -114,5 +116,21 @@ for(pkg_id in edi_data$id){
     
   } # Close entity loop
 } # Close EDI package ID loop
+
+## -------------------------------------------- ##
+# Download AND Data From Google Drive ----
+## -------------------------------------------- ##
+
+# Identify relevant Drive folder link
+drive_url <- googledrive::as_id("https://drive.google.com/drive/folders/1eAivlIGIzfXTjrE4_ki4Cgp5Ij-wqIbW")
+
+# Get the contents of that folder
+(drive_and <- googledrive::drive_ls(path = drive_url) %>% 
+  dplyr::filter(name == "TP00112_v13.csv"))
+
+# Download 'em (overwriting local copies if needed)
+purrr::walk2(.x = drive_and$id, .y = drive_and$name,
+  .f = ~ googledrive::drive_download(file = .x, overwrite = TRUE,
+    path = file.path("data", "from-drive", .y)))
 
 # End ----
