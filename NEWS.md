@@ -1,3 +1,10 @@
+## Version 1.0.0.900
+
+This is the development version, changes will be listed below as they are made.
+
+- Adds information from supported manuscript to README (e.g., paper title, author list)
+
+
 ## Version 1.0.0
 
 This is the first version of this repository to be archived on Zenodo in order to get a DOI.
