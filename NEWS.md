@@ -3,7 +3,7 @@
 This is the development version, changes will be listed below as they are made.
 
 - Adds information from supported manuscript to README (e.g., paper title, author list)
-
+- Adds license file (CC0-1.0)
 
 ## Version 1.0.0
 
